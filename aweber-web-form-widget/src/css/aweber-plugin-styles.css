@@ -1,0 +1,436 @@
+.aweber-wrapper {
+	margin-left: -20px;
+	padding: 0px;
+	color: #546a78;
+    font-family: "Source Sans Pro",arial,sans-serif;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: .25px;
+    line-height: 1.5;
+}
+.aweber-wrapper p{
+    font-size: 14px;
+}
+.aweber-wrapper hr {
+	-moz-border-bottom-colors: none;
+	-moz-border-image: none;
+	-moz-border-left-colors: none;
+	-moz-border-right-colors: none;
+	-moz-border-top-colors: none;
+	border-style: solid none;
+	border-width: 1px 0;
+	margin: 18px 0px;
+}
+.aweber-wrapper label {
+	font-weight: bolder;
+}
+.aweber-header {
+	height: 60px;
+    background-color: #2e7ad1;
+}
+.aweber-wrapper .aweber-logo {
+	fill: #fff;
+	margin-left: 20px;
+}
+.aweber-wrapper .aweber-logo svg {
+	height: 32px;
+	margin-top: 12px;
+}
+.aweber-body-wrapper {
+	margin: 20px;
+}
+.aweber-body{
+    background-color: #fff;
+    padding: 20px;
+    position: relative;
+    border-radius: 5px;
+}
+.aweber-hide {
+	display: none !important;
+}
+.aweber-admin-notice, .aweber-version-message{
+    margin-top: 1rem;
+    margin-right: 20px;
+}
+.aweber-header-bar {
+	line-height: 1.25;
+	padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+}
+table {
+	margin-left: -10px;
+}
+table td {
+	padding: 10px;
+}
+.aweber-forms-table {
+    margin-left: 0px;
+    text-align: left;
+    background-color: #fff;
+    border: 1px solid #a5b6c0;
+    border-spacing: 0;
+    border-radius: .25rem;
+    margin-bottom: 2rem;
+    overflow: hidden;
+    width: 100%;
+    border-bottom: transparent;
+}
+.aweber-forms-table thead {
+	background-color: #e1e7ea;
+}
+.aweber-forms-table td, .aweber-forms-table th {
+	border-bottom: 1px solid #a5b6c0;
+    padding: .75rem;
+    word-wrap: break-word;
+}
+.signup-webform-list .table-scroll {
+    min-height: 150px;
+    max-height: 250px;
+    overflow-y: scroll;
+}
+.split-webform-list .table-scroll {
+    min-height: 150px;
+    max-height: 350px;
+    padding-right: 15px;
+    overflow-y: scroll;
+}
+.landing-pages-list .table-scroll {
+    min-height: 150px;
+}
+.split-webform-list th:nth-child(n+3), .split-webform-list td:nth-child(n+3),
+.signup-webform-list th:nth-child(n+4), .signup-webform-list td:nth-child(n+4) {
+	text-align: center;
+}
+a[type=button] {
+	text-decoration: none;
+}
+a[type=button]:hover {
+	color: #fff;
+}
+.aweber-btn {
+	font-size: 15px;
+	color: #555;
+	background-color: #f7f7f7;
+	border: 1px solid transparent;
+	border-radius: 5px;
+	padding: 5px 15px;
+	-moz-transition: all 0.8s;
+	-webkit-transition: all 0.8s;
+	transition: all 0.8s;
+	cursor: pointer;
+	vertical-align: middle;
+}
+.aweber-btn:visited {
+  color: #fff;
+}
+.aweber-btn-primary {
+	color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+.aweber-btn-success {
+	color: #fff;
+    background-color: #5cb85c;
+    border-color: #4cae4c;
+}
+.aweber-btn-danger {
+    color: #fff;
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+.aweber-btn-plain {
+    background-color: #fff;
+    color: #546a78;
+}
+.aweber-body .list-dropdown {
+	position: absolute;
+    top: 40px;
+    right: 0px;
+    width: 100%;
+    text-align: right;
+    margin-right: 20px;
+}
+.aweber-preview-form-link {
+    display: block;
+    min-width: 100px;
+}
+.aweber-signup {
+	position: absolute;
+    top: 13px;
+    right: 20px;
+}
+.aweber-body .list-dropdown select {
+	width: 25%;
+}
+.aweber-marginl10{
+	margin-left: 10px;
+}
+.aweber-fleft {
+	float: left;
+}
+.aweber-fright {
+	float: right;
+}
+.aweber-text-right {
+	text-align: right;
+}
+.aweber-wrapper .form-table {
+	width: 40%;
+}
+.aweber-wrapper .form-table td{
+	vertical-align: top;
+}
+.aweber-wrapper .form-table label{
+	display: inline-block;
+    font-size: .9375rem;
+    font-weight: 600;
+    padding: 0 8px 2px 1px;
+    word-wrap: break-word;
+}
+.aweber-block-space {
+    margin-top: 4%;
+}
+#show-remove-connection p {
+    margin: 0px;
+}
+.aweber-body .reauthorize-font{
+    font-size: 0.9375rem !important;
+}
+.aweber-body .list-inline {
+    padding-left: 0;
+    list-style: none;
+    margin-left: -5px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 3px;
+}
+.aweber-body .list-inline li{
+    display: inline-block;
+    padding-right: 5px;
+    padding-left: 5px;
+}
+.aweber-body .list-inline li a {
+    color: #555;
+    cursor: pointer;
+    background-color: #d4d1d1;
+    border: 1px solid #ddd;
+    padding: 10px 15px;
+    border-radius: 5px 5px 0px 0px;
+    text-decoration: none;
+}
+.aweber-body .list-inline .active a {
+    border-bottom-color: transparent;
+    background-color: #fff;
+}
+.aweber-body .tab-content .tab-pane{
+    display: none;
+}
+.aweber-body .tab-content .active {
+    display: block;
+}
+.aweber-body .disabled-tabs {
+    pointer-events: none;
+}
+
+/* Modal */
+.aweber-modal {
+	background-color: rgba(0,0,0,.75);
+    bottom: 0;
+    display: none;
+    height: 100%;
+    margin: 0 auto;
+    overflow-y: scroll;
+    padding: 0 1.333rem;
+    position: fixed;
+    right: 0;
+    z-index: 10000;
+}
+.aweber-modal, .aweber-modal-content {
+	width: 100%;
+}
+.aweber-modal-content {
+	background-color: #fff;
+    border-radius: .25rem;
+    margin: 10vh auto;
+}
+.aweber-modal-header {
+	padding-left: 1.4rem;
+    padding-right: 1.4rem;
+}
+.aweber-modal-header h1{
+    margin: 0px;
+}
+.aweber-modal-body {
+	padding-bottom: 1rem;
+    padding-top: 1rem;
+}
+.aweber-modal-footer {
+	-webkit-box-align: center;
+    align-items: center;
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-pack: end;
+    justify-content: flex-end;
+}
+
+.aweber-modal-header .close{
+    float: right;
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    filter: alpha(opacity=20);
+    opacity: .2;
+    padding: 0;
+    cursor: pointer;
+    background: 0 0;
+    border: 0;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+/* Modal medium */
+.aweber-modal-md {
+	max-width: 500px;
+}
+.aweber-modal-md .aweber-modal-header {
+	padding-top: 1.4rem;
+}
+.aweber-modal-md .aweber-modal-body, .aweber-modal-md .aweber-modal-footer, .aweber-modal-md .aweber-modal-header {
+	padding-left: 1.4rem;
+    padding-right: 1.4rem;
+}
+.aweber-modal-md .aweber-modal-footer {
+	padding-bottom: 1.4rem;
+}
+
+/* Modal Large */
+.aweber-modal-lg {
+	max-width: 800px;
+}
+.aweber-modal-lg .aweber-modal-header {
+	padding-top: 1.8rem;
+}
+.aweber-modal-lg .aweber-modal-body, .aweber-modal-lg .aweber-modal-footer, .aweber-modal-lg .aweber-modal-header {
+	padding-left: 1.8rem;
+    padding-right: 1.8rem;
+}
+.aweber-modal-lg .aweber-modal-footer {
+	padding-bottom: 1.8rem;
+}
+
+.aweber-dashboard-header{
+    width: 100%;
+    -webkit-box-shadow: 0 5px 8px rgb(0 0 0 / 5%);
+    box-shadow: 0 5px 8px rgb(0 0 0 / 5%);
+    margin: 0 -12px 8px;
+    padding: 0 12px 12px;
+}
+.aweber-dashboard-header .aw-logo{
+    width: 30px;
+    display: inline-block;
+}
+.aweber-dashboard-header .aw-logo img{
+    width: 100%;
+    vertical-align: middle;
+}
+.aweber-dashboard-header .aw-versions{
+    display: inline-block;
+    vertical-align: middle;
+}
+.aweber-dashboard-feed{
+    font-size: 14px;
+    font-weight: 500;
+}
+.aweber-dashboard-feed h3{
+    font-weight: 700 !important;
+    border-bottom: 1px solid #eee;
+    margin: 0 -12px 15px -12px !important;
+    padding: 6px 12px !important;
+}
+.aweber-dashboard-footer{
+    margin: 12px -12px -12px;
+    padding: 12px;
+    border-top: 1px solid #eee;
+}
+.aweber-dashboard-footer ul {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.aweber-dashboard-footer ul li {
+    padding: 0 10px;
+    margin: 0;
+    border-left: 1px solid #ddd;
+}
+.aweber-dashboard-footer ul li:first-child {
+    padding-left: 0;
+    border: none;
+}
+.aweber-connect-activate {
+    color: #93003c;
+    font-weight: bold;
+}
+.aweber-connect-activate:hover{
+    color: #93003c;
+}
+
+/* Alert Messages */
+.aweber-error-message {
+    color:#e01414;
+    display: inline-block;
+    font-size: 12px;
+    max-width: 300px;
+}
+.aweber-alert {
+	background-color: #f0f3f5;
+    border: 1px solid #3f505a;
+    border-radius: .25rem;
+    color: #151b1e;
+    display: -webkit-box;
+    display: flex;
+    margin-bottom: 1rem;
+    padding: .8rem 1rem;
+}
+.aweber-alert-positive {
+	background-color: #c3eed7;
+    border-color: #206f45;
+}
+.aweber-alert-negative {
+	background-color: #f4c4c5;
+    border-color: #7f1719;
+}
+.aweber-alert p {
+	margin: 0 0 0 10px;
+    font-size: 15px;
+}
+
+
+/* Forms elements */
+.aweber-form-text{
+ 	background-color: #fff;
+    border: solid 1px #ddd;
+    border-radius: 4px;
+    color: #546a78;
+    display: block;
+    height: 34px;
+    padding: 8px 8px 4px;
+    width: 100%;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.07);
+}
+input[type=checkbox] {
+	margin: 0 4px 0 0;
+}
+
+@media only screen and (max-width: 600px) {
+	.aweber-signup {
+		position: initial;
+	}
+}
+
+.aweber-forms-table .aw-btn-group > .aweber-btn:not(:first-child) {
+    margin-left: 10px;
+}
