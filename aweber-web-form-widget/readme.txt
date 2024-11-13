@@ -3,8 +3,8 @@ Contributors: aweber
 Donate link: http://www.aweber.com
 Tags: email, marketing, email marketing, webform, web, form, aweber, mailing list, API, newsletter, web push notification, landing page, landing page form, sign up form, email automation, grow email list, increase subscribers, popup, form, lead generation, email subscription, page builder
 Requires at least: 4.7
-Tested up to: 6.6
-Stable tag: 7.3.19
+Tested up to: 6.7
+Stable tag: 7.3.20
 Requires PHP: 5.6
 
 Easily grow your email list with AWeber. Embed landing pages & sign up forms, add visitors, support for Elementor Free & Pro, and quickly track results.
@@ -101,6 +101,9 @@ If you're manually installing the widget as a .zip, make sure you upload it to "
 7. Easily integrate with AWeber through Elementor Free and Elementor Pro.
 
 == Changelog =
+= 7.3.20 =
+* Updated 'Tested up to' to 6.7
+
 = 7.3.19 =
 * Replaced DOMNoteInserted listeners with MutationObserver API, 
   since DOMNoteInserted listeners as deprecated.

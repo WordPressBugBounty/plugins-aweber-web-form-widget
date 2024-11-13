@@ -4,9 +4,9 @@ var model_fields = [];
 var custom_fields = [];
 var get_aweber_shortcodes_ajax = null;
 var get_aweber_lists_ajax = null;
-var elementor_aweber_widget_event_added = 0;
 var elementor_control_aweber_form_submit_added = false;
 var elementor_control_aweber_form_submit_observer = null;
+var elementor_control_aweber_widget_observer = null;
 
 function update_message(panel, message, selector) {
     cls_selector = 'important_note';
@@ -394,16 +394,22 @@ function load_aweber_list(panel, model) {
 jQuery( window ).on( 'elementor/frontend/init', () => {
     if (typeof elementor !== 'undefined') {
         elementor.hooks.addAction( 'panel/open_editor/widget/aweber', function(panel, model, view) {
-            if (elementor_aweber_widget_event_added == 0){
-                init_aweber_elements(panel, model, view);
+            // Init the AWeber elements.
+            init_aweber_elements(panel, model, view);
+            if (elementor_control_aweber_widget_observer) {
+                // Disconnect the observer if already connected.
+                elementor_control_aweber_widget_observer.disconnect();
             }
-            panel.$el.off('DOMNodeInserted', '#elementor-panel-page-editor');
-            panel.$el.on('DOMNodeInserted', '#elementor-panel-page-editor', function(event){
-                if (jQuery(event.target).hasClass('elementor-control-aweber_form') || jQuery(event.target).find('.elementor-control-aweber_form').length) {
+            elementor_control_aweber_widget_observer = new MutationObserver((mutationList, observer) => {
+                if (panel.$el.hasClass('elementor-control-aweber_form') || panel.$el.find('.elementor-control-aweber_form').length) {
                     init_aweber_elements(panel, model, view);
+                } else if (panel.$el.find('#elementor-panel-header-title').text().includes('AWeber') === false) {
+                    // AWeber Panel got closed. so disconnect the observer.
+                    observer.disconnect();
+                    elementor_control_aweber_widget_observer = null;
                 }
-                elementor_aweber_widget_event_added = 1;
             });
+            elementor_control_aweber_widget_observer.observe(panel.$el.find('#elementor-panel-content-wrapper')[0], { attributes: true, childList: true });
         });
 
         elementor.hooks.addAction( 'panel/open_editor/widget/form', function(panel, model, view) {
@@ -421,9 +427,14 @@ jQuery( window ).on( 'elementor/frontend/init', () => {
                 } else {
                     elementor_control_aweber_form_submit_added = false;
                 }
+
+                if (panel.$el.find('#elementor-panel-header-title').text().includes('Form') === false) {
+                    observer.disconnect();
+                    elementor_control_aweber_form_submit_observer = null;
+                }
             });
             // Start observing the target node for configured mutations
-            elementor_control_aweber_form_submit_observer.observe(panel.$el.find('#elementor-panel-content-wrapper')[0], { attributes: true, childList: true, subtree: true });
+            elementor_control_aweber_form_submit_observer.observe(panel.$el.find('#elementor-panel-content-wrapper')[0], { attributes: true, childList: true });
         });
     }
 });
