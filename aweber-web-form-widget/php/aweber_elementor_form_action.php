@@ -6,7 +6,7 @@ class AWeberElementorFormAction extends \ElementorPro\Modules\Forms\Classes\Acti
 	}
 
 	public function get_label() {
-		return __( 'AWeber', 'aweber' );
+		return __( 'AWeber', 'aweber-web-form-widget' );
 	}
 
 	public function run( $record, $ajax_handler ) {
@@ -70,7 +70,7 @@ class AWeberElementorFormAction extends \ElementorPro\Modules\Forms\Classes\Acti
 		$widget->start_controls_section(
 			'aweber_form_action',
 			[
-				'label' => __( 'AWeber', 'aweber' ),
+				'label' => __( 'AWeber', 'aweber-web-form-widget' ),
 				'condition' => [
 					'submit_actions' => $this->get_name(),
 				],
@@ -84,16 +84,16 @@ class AWeberElementorFormAction extends \ElementorPro\Modules\Forms\Classes\Acti
 			$widget->add_control(
 				'important_note',
 				[
-					'label' => __( '', 'aweber' ),
+					'label' => '',
 					'type' => \Elementor\Controls_Manager::RAW_HTML,
-					'raw' => __( 'Loading the AWeber lists', 'aweber' ),
+					'raw' => __( 'Loading the AWeber lists', 'aweber-web-form-widget' ),
 				]
 			);
 
 			$widget->add_control(
 				'aweber_form_list',
 				[
-					'label' => __( 'List', 'aweber' ),
+					'label' => __( 'List', 'aweber-web-form-widget' ),
 					'type' => \Elementor\Controls_Manager::SELECT,
 					'label_block' => true,
 					'options'	=> []
@@ -103,17 +103,17 @@ class AWeberElementorFormAction extends \ElementorPro\Modules\Forms\Classes\Acti
 			$widget->add_control(
 				'aweber_form_tags',
 				[
-					'label' => __( 'Tags', 'aweber' ),
+					'label' => __( 'Tags', 'aweber-web-form-widget' ),
 					'type' => \Elementor\Controls_Manager::TEXT,
 					'label_block' => true,
-					'description' => __( 'Add comma separated tags.', 'aweber' ),
+					'description' => __( 'Add comma separated tags.', 'aweber-web-form-widget' ),
 				]
 			);
 
 			$widget->add_control(
 				'aweber_form_more_options',
 				[
-					'label' => __( 'Field Mapping', 'aweber' ),
+					'label' => __( 'Field Mapping', 'aweber-web-form-widget' ),
 					'type' => \Elementor\Controls_Manager::HEADING,
 					'separator' => 'before',
 				]
@@ -122,7 +122,7 @@ class AWeberElementorFormAction extends \ElementorPro\Modules\Forms\Classes\Acti
 			$widget->add_control(
 				'aweber_form_name_static_field',
 				[
-					'label' => __( 'Name', 'aweber' ),
+					'label' => __( 'Name', 'aweber-web-form-widget' ),
 					'type' => \Elementor\Controls_Manager::SELECT,
 					'options'	=> []
 				]
@@ -131,7 +131,7 @@ class AWeberElementorFormAction extends \ElementorPro\Modules\Forms\Classes\Acti
 			$widget->add_control(
 				'aweber_form_email_static_field',
 				[
-					'label' => __( 'Email', 'aweber' ),
+					'label' => __( 'Email', 'aweber-web-form-widget' ),
 					'type' => \Elementor\Controls_Manager::SELECT,
 					'options'	=> []
 				]
@@ -140,9 +140,9 @@ class AWeberElementorFormAction extends \ElementorPro\Modules\Forms\Classes\Acti
 			$widget->add_control(
 				'aweber_custom_fields_message',
 				[
-					'label' => __( '', 'aweber' ),
+					'label' => '',
 					'type' => \Elementor\Controls_Manager::RAW_HTML,
-					'raw' => __( 'Loading custom fields', 'aweber' ),
+					'raw' => __( 'Loading custom fields', 'aweber-web-form-widget' ),
 				]
 			);
 
@@ -150,7 +150,7 @@ class AWeberElementorFormAction extends \ElementorPro\Modules\Forms\Classes\Acti
 				$widget->add_control(
 					'aweber_form_custom_dynamic_field_'.$i,
 					[
-						'label' => __( 'Custom Fields', 'aweber' ),
+						'label' => __( 'Custom Fields', 'aweber-web-form-widget' ),
 						'type' => \Elementor\Controls_Manager::SELECT,
 						'options'	=> []
 					]
@@ -160,9 +160,9 @@ class AWeberElementorFormAction extends \ElementorPro\Modules\Forms\Classes\Acti
 			$widget->add_control(
 				'aweber_connection_closed_message',
 				[
-					'label' => __( '', 'aweber' ),
+					'label' => '',
 					'type' => \Elementor\Controls_Manager::RAW_HTML,
-					'raw' => __( '<p style="text-align: center">Before using this element, please connect your AWeber account. <br><br><a href="'.admin_url('admin.php?page=aweber.php').'">Go to Plugin</a></p>', 'aweber' ),
+					'raw' => '<p style="text-align: center">Before using this element, please connect your AWeber account. <br><br><a href="'.admin_url('admin.php?page=aweber.php').'">Go to Plugin</a></p>', 'aweber-web-form-widget',
 				]
 			);
 		endif;

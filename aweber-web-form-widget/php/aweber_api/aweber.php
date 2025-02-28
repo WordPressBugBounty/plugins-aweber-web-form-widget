@@ -259,7 +259,7 @@ class AWeberAPI extends AWeberAPIBase {
      */
     public function __get($item) {
         if ($item == 'user') return $this->adapter->user;
-        trigger_error("Could not find \"{$item}\"");
+        trigger_error('Could not find "' . esc_html($item) . '"');
     }
 
     /**

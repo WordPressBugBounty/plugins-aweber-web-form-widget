@@ -5,7 +5,7 @@ use AWeberWebFormPluginNamespace as AWeberWebformPluginAlias;
 Plugin Name: AWeber for WordPress
 Plugin URI: http://www.aweber.com/faq/questions/588/How+Do+I+Use+AWeber%27s+Webform+Widget+for+Wordpress%3F
 Description: Add AWeber Landing Pages and Sign Up Forms to your WordPress site
-Version: 7.3.20
+Version: 7.3.22
 Author: AWeber
 Author URI: http://www.aweber.com
 License: MIT
@@ -13,7 +13,7 @@ License: MIT
 
 
 // Defined the AWeber Wordpress plugin version that can be used accross the plugin.
-define ('AWEBER_PLUGIN_VERSION', 'v7.3.20');
+define ('AWEBER_PLUGIN_VERSION', 'v7.3.22');
 
 function AWeberMandatoryPHPVersionMessage() {
     global $aweber_webform_plugin;
@@ -90,21 +90,35 @@ if (!function_exists('AWeberRegisterSettings')) {
     function AWeberRegisterSettings() {
         if (is_admin()) {
             global $aweber_webform_plugin;
-            register_setting($aweber_webform_plugin->oauthOptionsName, 'aweber_webform_oauth_id');
-            register_setting($aweber_webform_plugin->oauthOptionsName, 'aweber_webform_oauth_removed');
-            register_setting($aweber_webform_plugin->oauthOptionsName, 'aweber_comment_checkbox_toggle');
-            register_setting($aweber_webform_plugin->oauthOptionsName, 'aweber_registration_checkbox_toggle');
-            register_setting($aweber_webform_plugin->oauthOptionsName, 'aweber_analytics_checkbox_toggle');
+            register_setting($aweber_webform_plugin->oauthOptionsName, 'aweber_webform_oauth_id',
+                             array('sanitize_callback' => 'sanitize_text_field'));
+            register_setting($aweber_webform_plugin->oauthOptionsName, 'aweber_webform_oauth_removed',
+                             array('sanitize_callback' => 'sanitize_text_field'));
+            register_setting($aweber_webform_plugin->oauthOptionsName, 'aweber_comment_checkbox_toggle',
+                             array('sanitize_callback' => 'sanitize_text_field'));
+            register_setting($aweber_webform_plugin->oauthOptionsName, 'aweber_registration_checkbox_toggle',
+                             array('sanitize_callback' => 'sanitize_text_field'));
+            register_setting($aweber_webform_plugin->oauthOptionsName, 'aweber_analytics_checkbox_toggle',
+                             array('sanitize_callback' => 'sanitize_text_field'));
 
-            register_setting($aweber_webform_plugin->oauthOptionsName, 'aweber_comment_subscriber_text');
-            register_setting($aweber_webform_plugin->oauthOptionsName, 'aweber_register_subscriber_text');
-            register_setting($aweber_webform_plugin->oauthOptionsName, 'aweber_register_subscriber_listid');
-            register_setting($aweber_webform_plugin->oauthOptionsName, 'aweber_comment_subscriber_listid');
-            register_setting($aweber_webform_plugin->oauthOptionsName, 'aweber_comment_subscriber_tags');
-            register_setting($aweber_webform_plugin->oauthOptionsName, 'aweber_register_subscriber_tags');
-            register_setting($aweber_webform_plugin->oauthOptionsName, 'aweber_option_submitted');
-            register_setting($aweber_webform_plugin->oauthOptionsName, 'aweber_oauth_error');
-            register_setting($aweber_webform_plugin->oauthOptionsName, 'aweber_web_push_listid');
+            register_setting($aweber_webform_plugin->oauthOptionsName, 'aweber_comment_subscriber_text',
+                             array('sanitize_callback' => 'sanitize_text_field'));
+            register_setting($aweber_webform_plugin->oauthOptionsName, 'aweber_register_subscriber_text',
+                             array('sanitize_callback' => 'sanitize_text_field'));
+            register_setting($aweber_webform_plugin->oauthOptionsName, 'aweber_register_subscriber_listid',
+                             array('sanitize_callback' => 'sanitize_text_field'));
+            register_setting($aweber_webform_plugin->oauthOptionsName, 'aweber_comment_subscriber_listid',
+                             array('sanitize_callback' => 'sanitize_text_field'));
+            register_setting($aweber_webform_plugin->oauthOptionsName, 'aweber_comment_subscriber_tags',
+                             array('sanitize_callback' => 'sanitize_text_field'));
+            register_setting($aweber_webform_plugin->oauthOptionsName, 'aweber_register_subscriber_tags',
+                             array('sanitize_callback' => 'sanitize_text_field'));
+            register_setting($aweber_webform_plugin->oauthOptionsName, 'aweber_option_submitted',
+                             array('sanitize_callback' => 'sanitize_text_field'));
+            register_setting($aweber_webform_plugin->oauthOptionsName, 'aweber_oauth_error',
+                             array('sanitize_callback' => 'sanitize_text_field'));
+            register_setting($aweber_webform_plugin->oauthOptionsName, 'aweber_web_push_listid',
+                             array('sanitize_callback' => 'sanitize_text_field'));
 
             $pluginAdminOptions = get_option($aweber_webform_plugin->adminOptionsName);
             $oauth2TokensOptions = get_option($aweber_webform_plugin->oauth2TokensOptions);
@@ -124,8 +138,8 @@ if (!function_exists('AWeberFormsWidgetController_widget')) {
         }
 
         if (function_exists('wp_register_sidebar_widget') and function_exists('wp_register_widget_control')) {
-            wp_register_sidebar_widget($aweber_webform_plugin->widgetOptionsName, __('AWeber Sign Up Form'), array(&$aweber_webform_plugin, 'printWidget'));
-            wp_register_widget_control($aweber_webform_plugin->widgetOptionsName, __('AWeber Sign Up Form'), array(&$aweber_webform_plugin, 'printWidgetControl'));
+            wp_register_sidebar_widget($aweber_webform_plugin->widgetOptionsName, __('AWeber Sign Up Form', 'aweber-web-form-widget'), array(&$aweber_webform_plugin, 'printWidget'));
+            wp_register_widget_control($aweber_webform_plugin->widgetOptionsName, __('AWeber Sign Up Form', 'aweber-web-form-widget'), array(&$aweber_webform_plugin, 'printWidgetControl'));
         }
     }
 }
@@ -153,7 +167,7 @@ if (!function_exists('AddAWeberShortCodes')) {
     // the script will insert the shortcode on the click event
     function AddAWeberShortCodeScript( $plugin_array ) {
         // Creates a cryptographic token for 'get_aweber_webform_shortcodes' action.
-        echo '<input type="hidden" value="' . wp_create_nonce('get_aweber_webform_shortcodes') . '" id="aweber-tinymice-shotcode-nonce" />';
+        echo '<input type="hidden" value="' . esc_attr(wp_create_nonce('get_aweber_webform_shortcodes')) . '" id="aweber-tinymice-shotcode-nonce" />';
         $plugin_array['aweber_shortcode_button'] = plugin_dir_url(__FILE__) . '/src/js/aweber_tinymce_shortcode_button.js';
         return $plugin_array;
     }

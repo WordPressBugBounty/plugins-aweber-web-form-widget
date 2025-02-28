@@ -16,7 +16,12 @@
 
 				<div class="list-dropdown">
 					<label>List: </label>
-					<select data-selected="<?php echo $options['selected_signup_form_list_id']; ?>" class="<?php echo $this->widgetOptionsName; ?>-list" data-type="sigup-form" name="<?php echo $this->widgetOptionsName; ?>[list]" id="<?php echo $this->widgetOptionsName; ?>-list">
+					<select 
+						data-selected="<?php echo esc_attr($options['selected_signup_form_list_id']); ?>" 
+						class="<?php echo esc_attr($this->widgetOptionsName . '-list'); ?>" 
+						data-type="sigup-form" 
+						name="<?php echo esc_attr($this->widgetOptionsName . '[list]'); ?>" 
+						id="<?php echo esc_attr($this->widgetOptionsName . '-list'); ?>"> 
                         <option value="False">Loading AWeber lists</option>
 					</select>
 					<a type="button" href="https://www.aweber.com/users/web_forms/edit/" target="_blank" class="aweber-btn aweber-btn-success aweber-marginl10">Create</a>
@@ -33,8 +38,12 @@
 				<h1 class="aweber-header-bar">Split Tests</h1>
 				<div class="list-dropdown">
 					<label>List: </label>
-					<select data-selected="<?php echo $options['selected_split_test_form_list_id']; ?>" class="<?php echo $this->widgetOptionsName; ?>-list" data-type="split-test"
-					name="<?php echo $this->widgetOptionsName; ?>[list]" id="<?php echo $this->widgetOptionsName; ?>-list">
+					<select 
+						data-selected="<?php echo esc_attr($options['selected_split_test_form_list_id']); ?>" 
+						class="<?php echo esc_attr($this->widgetOptionsName . '-list'); ?>" 
+						data-type="split-test"
+						name="<?php echo esc_attr($this->widgetOptionsName . '[list]'); ?>"
+						id="<?php echo esc_attr($this->widgetOptionsName . '-list'); ?>">
 						<option value="False">Loading AWeber lists</option>
 					</select>
 					<a type="button" href="https://www.aweber.com/users/web_form_splits/create/" target="_blank" class="aweber-btn aweber-btn-success aweber-marginl10">Create</a>

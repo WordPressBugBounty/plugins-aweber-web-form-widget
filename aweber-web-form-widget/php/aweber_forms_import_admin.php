@@ -59,14 +59,14 @@
             if (get_option('aweber_option_submitted') == 'TRUE') {
                 if (get_option('aweber_comment_checkbox_toggle') == 'ON') {
                     if (get_option('aweber_comment_subscriber_listid') == 'FALSE') {
-                        echo $this->messages['no_list_selected'];
+                        echo wp_kses_post($this->messages['no_list_selected']);
                         $error = True;
                     }
                 }
 
                 if (get_option('aweber_registration_checkbox_toggle') == 'ON') {
                     if (get_option('aweber_register_subscriber_listid') == 'FALSE' && !$error) {
-                        echo $this->messages['no_list_selected'];
+                        echo wp_kses_post($this->messages['no_list_selected']);
                         $error = True;
                     }
                 }
@@ -87,9 +87,9 @@
                     }
                         
                     if (get_option('aweber_comment_checkbox_toggle') == 'ON' && strlen(get_option('aweber_comment_subscriber_text')) < 7) {
-                        echo $this->messages['signup_text_too_short'];
+                        echo wp_kses_post($this->messages['signup_text_too_short']);
                     } else if (get_option('aweber_registration_checkbox_toggle') == 'ON' && strlen(get_option('aweber_register_subscriber_text')) < 7) {
-                        echo $this->messages['signup_text_too_short'];
+                        echo wp_kses_post($this->messages['signup_text_too_short']);
                     } else {
                         $options['aweber_comment_subscriber_text']  = get_option('aweber_comment_subscriber_text');
                         $options['aweber_register_subscriber_text'] = get_option('aweber_register_subscriber_text');
@@ -191,14 +191,14 @@
                             <table class="form-table">
                                 <tr>
                                     <td><label>Step 1:</label></td>
-                                    <td><a type="button" target="_blank" href="<?php echo $authorizeUrl ?>" class="aweber-btn aweber-btn-primary">Get Started</a></td>
+                                    <td><a type="button" target="_blank" href="<?php echo esc_attr($authorizeUrl) ?>" class="aweber-btn aweber-btn-primary">Get Started</a></td>
                                 </tr>
                                 <tr>
                                     <td><label>Step 2:</label></td>
                                     <td>
                                         <label>Paste in your Authorization code:</label>
                                         <?php if($incorrect_oauth_id): ?>
-                                            <input type="text" name="aweber_webform_oauth_id" class="aweber-form-text" value="<?php echo $oauth_id ?>" />
+                                            <input type="text" name="aweber_webform_oauth_id" class="aweber-form-text" value="<?php echo esc_attr($oauth_id) ?>" />
                                             <span class="aweber-error-message">An incorrect authorization code was entered.</span>
                                         <?php else: ?>
                                             <input type="text" name="aweber_webform_oauth_id" class="aweber-form-text" />
@@ -207,7 +207,7 @@
                                 </tr>
                                 <tr>
                                     <td colspan="3" align="right">
-                                        <input type="hidden" name="_wp_http_referer" value="<?php echo admin_url('admin.php?page=aweber.php'); ?>" />
+                                        <input type="hidden" name="_wp_http_referer" value="<?php echo esc_attr(admin_url('admin.php?page=aweber.php')); ?>" />
                                         <input type="submit" id="aweber-settings-button" class="aweber-btn aweber-btn-primary" value="Finish" />
                                     </td>
                                 </tr>
@@ -251,12 +251,12 @@
                                     <div id="aweber-create-subscriber-comment-config" style="margin-left: 20px; <?php echo ($options['create_subscriber_comment_checkbox'] == 'ON') ? '': 'display: none;'; ?>">
                                         <label>Add Subscriber to:</label>
                                         <?php if (!empty($lists)): ?>
-                                            <select class="aweber-form-text <?php echo $this->widgetOptionsName; ?>-comment-list">
+                                            <select class="aweber-form-text <?php echo esc_attr($this->widgetOptionsName); ?>-comment-list">
                                                 <option value="FALSE">Select A List</option>
                                                 <?php foreach ($lists as $list): ?>
-                                                    <option value="<?php echo $list->id; ?>"
+                                                    <option value="<?php echo esc_attr($list->id); ?>"
                                                         <?php echo ($list->id == $options['aweber_comment_subscriber_listid']) ? ' selected="selected"' : ""; ?>>
-                                                        <?php echo $list->name; ?>
+                                                        <?php echo esc_html($list->name); ?>
                                                     </option>
                                                 <?php endforeach; ?>
                                             </select>
@@ -267,12 +267,12 @@
                                         <div class="aweber-block-space"></div>
 
                                         <label>Add Tags:</label><small>(separate tags with commas)</small>
-                                        <input type="text" placeholder="Add Tags" id="aweber-comment-subscriber-tags-input" value="<?php echo $options['aweber_comment_subscriber_tags'];?>" class="aweber-form-text" />
+                                        <input type="text" placeholder="Add Tags" id="aweber-comment-subscriber-tags-input" value="<?php echo esc_attr($options['aweber_comment_subscriber_tags']);?>" class="aweber-form-text" />
 
                                         <div class="aweber-block-space"></div>
 
                                         <label>Subscription Label:</label>
-                                        <input type="text" placeholder="Subscription Label" id="aweber-comment-subscriber-input" value="<?php echo $options['aweber_comment_subscriber_text'];?>" class="aweber-form-text" />
+                                        <input type="text" placeholder="Subscription Label" id="aweber-comment-subscriber-input" value="<?php echo esc_attr($options['aweber_comment_subscriber_text']);?>" class="aweber-form-text" />
                                     </div>
                                 </div>
                                 <?php if(wp_is_mobile()): ?>
@@ -289,12 +289,12 @@
                                     <div id="aweber-create-subscriber-registration-config" style="margin-left: 20px; <?php echo ($options['create_subscriber_registration_checkbox'] == 'ON') ? '': 'display: none;'; ?>">
                                         <label>Add Subscriber to:</label>
                                         <?php if (!empty($lists)): ?>
-                                            <select class="aweber-form-text <?php echo $this->widgetOptionsName; ?>-register-list">
+                                            <select class="aweber-form-text <?php echo esc_attr($this->widgetOptionsName); ?>-register-list">
                                                 <option value="FALSE">Select A List</option>
                                                 <?php foreach ($lists as $list): ?>
-                                                    <option value="<?php echo $list->id; ?>"
+                                                    <option value="<?php echo esc_attr($list->id); ?>"
                                                         <?php echo ($list->id == $options['aweber_register_subscriber_listid']) ? ' selected="selected"' : ""; ?>>
-                                                        <?php echo $list->name; ?>
+                                                        <?php echo esc_html($list->name); ?>
                                                     </option>
                                                 <?php endforeach; ?>
                                             </select>
@@ -305,12 +305,12 @@
                                         <div class="aweber-block-space"></div>
 
                                         <label>Add Tags:</label><small>(separate tags with commas)</small>
-                                        <input type="text" placeholder="Add Tags" id="aweber-register-subscriber-tags-input" value="<?php echo $options['aweber_register_subscriber_tags'];?>" class="aweber-form-text" />
+                                        <input type="text" placeholder="Add Tags" id="aweber-register-subscriber-tags-input" value="<?php echo esc_attr($options['aweber_register_subscriber_tags']);?>" class="aweber-form-text" />
 
                                         <div class="aweber-block-space"></div>
 
                                         <label>Subscription Label:</label>
-                                        <input type="text" placeholder="Subscription Label" id="aweber-register-subscriber-input" value="<?php echo $options['aweber_register_subscriber_text'];?>" class="aweber-form-text" />
+                                        <input type="text" placeholder="Subscription Label" id="aweber-register-subscriber-input" value="<?php echo esc_attr($options['aweber_register_subscriber_text']);?>" class="aweber-form-text" />
                                     </div>
                                 </div>
                                 <div style="clear: both;"></div>
@@ -345,9 +345,9 @@
                                     <select class="aweber-form-text aweber-wpn-select-list">
                                         <option value="FALSE">Select a list</option>
                                         <?php foreach ($webPushLists as $list): ?>
-                                            <option value="<?php echo $list['id']; ?>"
+                                            <option value="<?php echo esc_attr($list['id']); ?>"
                                                 <?php echo ($list['id'] == $options['aweber_web_push_listid']) ? ' selected="selected"' : ""; ?>>
-                                                <?php echo $list['name']; ?>
+                                                <?php echo esc_html($list['name']); ?>
                                             </option>
                                         <?php endforeach; ?>
                                     </select>
@@ -376,43 +376,43 @@
 
                             <!-- AWeber Register Subscriber LIST ID -->
                             <input type="hidden" id="aweber-settings-hidden-register-subscriber-listid" 
-                                name="aweber_register_subscriber_listid" value="<?php echo $options['aweber_register_subscriber_listid'];?>" />
+                                name="aweber_register_subscriber_listid" value="<?php echo esc_attr($options['aweber_register_subscriber_listid']);?>" />
 
                             <!-- AWeber Register Subscriber LIST ID -->
                             <input type="hidden" id="aweber-settings-hidden-comment-subscriber-listid" 
-                                name="aweber_comment_subscriber_listid" value="<?php echo $options['aweber_comment_subscriber_listid'];?>" />
+                                name="aweber_comment_subscriber_listid" value="<?php echo esc_attr($options['aweber_comment_subscriber_listid']);?>" />
 
                             <!-- AWeber Comment subscriber status field -->
                             <input type="hidden" id="aweber-settings-hidden-comment-checkbox-value" 
-                                name="aweber_comment_checkbox_toggle" value="<?php echo $options['create_subscriber_comment_checkbox'];?>" />
+                                name="aweber_comment_checkbox_toggle" value="<?php echo esc_attr($options['create_subscriber_comment_checkbox']);?>" />
 
                             <!-- AWeber Register subscriber status field -->
                             <input type="hidden" id="aweber-settings-hidden-registration-checkbox-value" 
-                                name="aweber_registration_checkbox_toggle" value="<?php echo $options['create_subscriber_registration_checkbox'];?>" />
+                                name="aweber_registration_checkbox_toggle" value="<?php echo esc_attr($options['create_subscriber_registration_checkbox']);?>" />
 
                             <!-- AWeber Comment subscriber tag field -->
                             <input type="hidden" id="aweber-settings-hidden-comment-tags" 
-                                name="aweber_comment_subscriber_tags" value="<?php echo $options['aweber_comment_subscriber_tags'];?>" />
+                                name="aweber_comment_subscriber_tags" value="<?php echo esc_attr($options['aweber_comment_subscriber_tags']);?>" />
 
                             <!-- AWeber Register subscriber tag field -->
                             <input type="hidden" id="aweber-settings-hidden-register-tags" 
-                                name="aweber_register_subscriber_tags" value="<?php echo $options['aweber_register_subscriber_tags'];?>" />
+                                name="aweber_register_subscriber_tags" value="<?php echo esc_attr($options['aweber_register_subscriber_tags']);?>" />
 
                             <!-- AWeber Comment Subscriber signup text -->
                             <input type="hidden" id="aweber-settings-hidden-comment-text-value" 
-                                name="aweber_comment_subscriber_text" value="<?php echo $options['aweber_comment_subscriber_text'];?>" />
+                                name="aweber_comment_subscriber_text" value="<?php echo esc_attr($options['aweber_comment_subscriber_text']);?>" />
 
                             <!-- AWeber Regsiter Subscriber signup text -->
                             <input type="hidden" id="aweber-settings-hidden-register-text-value" 
-                                name="aweber_register_subscriber_text" value="<?php echo $options['aweber_register_subscriber_text'];?>" />
+                                name="aweber_register_subscriber_text" value="<?php echo esc_attr($options['aweber_register_subscriber_text']);?>" />
 
                             <!-- AWeber Analytics status field -->
                             <input type="hidden" id="aweber-settings-hidden-analytics-checkbox-toggle" 
-                                name="aweber_analytics_checkbox_toggle" value="<?php echo $options['aweber_add_analytics_checkbox'];?>" />
+                                name="aweber_analytics_checkbox_toggle" value="<?php echo esc_attr($options['aweber_add_analytics_checkbox']);?>" />
 
                             <!-- AWeber Web Push List ID -->
                             <input type="hidden" id="aweber-settings-hidden-web-push-listid" 
-                                name="aweber_web_push_listid" value="<?php echo $options['aweber_web_push_listid'];?>" />
+                                name="aweber_web_push_listid" value="<?php echo esc_attr($options['aweber_web_push_listid']);?>" />
 
                         <?php endif; ?>
                     </div>
@@ -429,7 +429,7 @@
                                 <td><b>Home URL:</b></td>
                                 <td><?php
                                     if (function_exists('get_home_url')):
-                                        echo get_home_url();
+                                        echo esc_html(get_home_url());
                                     else:
                                         echo '-';
                                     endif;
@@ -441,7 +441,7 @@
                                 <td><b>Site URL:</b></td>
                                 <td><?php
                                     if (function_exists('get_site_url')):
-                                        echo get_home_url();
+                                        echo esc_html(get_home_url());
                                     else:
                                         echo '-';
                                     endif;
@@ -452,14 +452,14 @@
                             <tr>
                                 <?php global $wp_version; ?>
                                 <td><b>Wordpress Version:</b></td>
-                                <td><?php echo isset($wp_version) ? $wp_version : '-' ?></td>
+                                <td><?php echo isset($wp_version) ? esc_html($wp_version) : '-' ?></td>
                             </tr>
 
                             <tr>
                                 <td><b>PHP Version:</b></td>
                                 <td><?php 
                                     if (function_exists('phpversion')):
-                                        echo phpversion();
+                                        echo esc_html(phpversion());
                                     else:
                                         echo '-';
                                     endif;
@@ -469,7 +469,7 @@
 
                             <tr>
                                 <td><b>AWeber Account ID:</b></td>
-                                <td><?php echo isset($account_id) ? $account_id : 'Not connected to AWeber' ?></td>
+                                <td><?php echo isset($account_id) ? esc_html($account_id) : 'Not connected to AWeber' ?></td>
                             </tr>
 
                             <?php 
@@ -479,28 +479,28 @@
                             ?>
                             <tr>
                                 <td><b>AWeber Plugin Version:</b></td>
-                                <td><?php echo $plugin_version; ?></td>
+                                <td><?php echo esc_html($plugin_version); ?></td>
                             </tr>
 
                             <tr>
                                 <td><b>Remote IP Address:</b></td>
-                                <td><?php echo isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '-' ?></td>
+                                <td><?php echo isset($_SERVER['REMOTE_ADDR']) ? esc_html($_SERVER['REMOTE_ADDR']) : '-' ?></td>
                             </tr>
 
                             <tr>
                                 <td><b>X Forwarded For IPs:</b></td>
-                                <td><?php echo isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : '-' ?></td>
+                                <td><?php echo isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? esc_html($_SERVER['HTTP_X_FORWARDED_FOR']) : '-' ?></td>
                             </tr>
 
                             <tr>
                                 <td><b>X Real IP:</b></td>
-                                <td><?php echo isset($_SERVER['HTTP_X_REAL_IP']) ? $_SERVER['HTTP_X_REAL_IP'] : '-' ?></td>
+                                <td><?php echo isset($_SERVER['HTTP_X_REAL_IP']) ? esc_html($_SERVER['HTTP_X_REAL_IP']) : '-' ?></td>
                             </tr>
                         </table>
 
                         <br>
 
-                        <button class="aweber-btn aweber-btn-primary" type="button" data-widget-name="<?php echo $this->widgetOptionsName ?>" id="aweber-webform-reload-cache">Reload Cache</button>
+                        <button class="aweber-btn aweber-btn-primary" type="button" data-widget-name="<?php echo esc_attr($this->widgetOptionsName) ?>" id="aweber-webform-reload-cache">Reload Cache</button>
 
                     </div>
 

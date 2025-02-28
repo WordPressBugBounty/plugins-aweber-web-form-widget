@@ -123,7 +123,7 @@ class AWeberEntry extends AWeberResponse {
         if ($this->_isChildCollection($value)) {
             return $this->_getCollection($value);
         }
-        throw new AWeberResourceNotImplemented($this, $value);
+        throw new AWeberResourceNotImplemented(esc_html($value));
     }
 
     /**
@@ -305,7 +305,7 @@ class AWeberEntry extends AWeberResponse {
      */
     protected function _methodFor($entryTypes) {
         if (in_array($this->type, $entryTypes)) return true;
-        throw new AWeberMethodNotImplemented($this);
+        throw new AWeberMethodNotImplemented();
     }
 
     /**

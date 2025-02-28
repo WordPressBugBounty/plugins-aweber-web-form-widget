@@ -17,7 +17,13 @@ function aweber_webform_uninstall_db() {
     global $wpdb;
     $tables = array();
     foreach ($tables as $table) {
-        $wpdb->query('DROP TABLE IF EXISTS ' . $wpdb->prefix . $table);
+        $table_name = $wpdb->prefix . $table;
+        $wpdb->query(
+            $wpdb->prepare(
+                'DROP TABLE IF EXISTS `%s`',
+                $table_name
+            )
+        );
     }
 }
 

@@ -174,7 +174,7 @@ class AWeberCollection extends AWeberResponse implements \ArrayAccess, \Iterator
         }
 
         # snag query string args from collection
-        $parsed = parse_url($this->data['next_collection_link']);
+        $parsed = wp_parse_url($this->data['next_collection_link']);
 
         # parse the query string to get params
         $pairs = explode('&', $parsed['query']);

@@ -136,7 +136,7 @@ class OAuthApplication implements AWeberOAuthAdapter {
         $data = json_decode($response->body, true);
 
         if (empty($options['allow_empty']) && !isset($data)) {
-            throw new AWeberResponseError($uri);
+            throw new AWeberResponseError(esc_url($uri));
         }
         return $data;
     }
@@ -196,8 +196,8 @@ class OAuthApplication implements AWeberOAuthAdapter {
      */
     public function parseAsError($response) {
         if (!empty($response['error'])) {
-            throw new AWeberOAuthException($response['error']['type'],
-                $response['error']['message']);
+            throw new AWeberOAuthException(esc_html($response['error']['type']),
+                esc_html($response['error']['message']));
         }
     }
 
@@ -215,7 +215,7 @@ class OAuthApplication implements AWeberOAuthAdapter {
     protected function requiredFromResponse($data, $requiredFields) {
         foreach ($requiredFields as $field) {
             if (empty($data[$field])) {
-                throw new AWeberOAuthDataMissing($field);
+                throw new AWeberOAuthDataMissing(esc_html($field));
             }
         }
     }
@@ -285,7 +285,7 @@ class OAuthApplication implements AWeberOAuthAdapter {
      */
     public function generateNonce($timestamp = false) {
         if (!$timestamp) $timestamp = $this->generateTimestamp();
-        return md5($timestamp.'-'.rand(10000,99999).'-'.uniqid());
+        return md5($timestamp.'-'.wp_rand(10000,99999).'-'.uniqid());
     }
 
     /**
@@ -387,7 +387,7 @@ class OAuthApplication implements AWeberOAuthAdapter {
      */
     public function createSignatureBase($method, $url, $data) {
         $method = $this->encode(strtoupper($method));
-        $query = parse_url($url, PHP_URL_QUERY);
+        $query = wp_parse_url($url, PHP_URL_QUERY);
         if ($query) {
             $parts = explode('?', $url, 2);
             $url = array_shift($parts);
@@ -454,7 +454,7 @@ class OAuthApplication implements AWeberOAuthAdapter {
      * @return void
      */
     public function makeRequest($method, $url, $data=array()) {
-        if ($this->debug) echo "\n** {$method}: $url\n";
+        if ($this->debug) echo "\n** ", esc_html($method), ": ", esc_url($url), "\n";
         
         switch (strtoupper($method)) {
             case 'POST':
@@ -468,28 +468,35 @@ class OAuthApplication implements AWeberOAuthAdapter {
                 break;
 
             default:
-                throw new AWeberMethodNotImplemented('This method is not Implemeneted.');
+                throw new AWeberMethodNotImplemented();
         }
 
         // enable debug output
         if ($this->debug) {
             echo "<pre>";
             print_r($oauth);
-            echo " --> Status: {$resp->headers['Status-Code']}\n";
-            echo " --> Body: {$resp->body}";
+            echo " --> Status: ", esc_html($resp->headers['Status-Code']), "\n";
+            echo " --> Body: ", esc_html($resp->body);
             echo "</pre>";
         }
 
         if (!$resp) {
             $msg  = 'Unable to connect to the AWeber API.  (' . $this->error . ')';
-            $error = array('message' => $msg, 'type' => 'APIUnreachableError',
-                           'documentation_url' => 'https://labs.aweber.com/docs/troubleshooting');
-            throw new AWeberAPIException($error, $url);
+            throw new AWeberAPIException(array('message' => esc_html($msg), 'type' => 'APIUnreachableError',
+                                               'documentation_url' => 'https://labs.aweber.com/docs/troubleshooting'),
+                                         esc_url($url));
         }
 
         if($resp->headers['Status-Code'] >= 400) {
             $data = json_decode($resp->body, true);
-            throw new AWeberAPIException($data['error'], $url);
+            $error = $data['error'];
+            throw new AWeberAPIException(
+                array(
+                    'type' => esc_html($error['type']),
+                    'status' => esc_html($error['status']),
+                    'error_description' => esc_html($error['error_description']),
+                    'documentation_url' => esc_url($error['documentation_url']),
+                ), esc_url($url));
         }
 
         return $resp;

@@ -13,10 +13,10 @@ class AWeberElementorWidget extends Widget_Base {
 		];
 
 		wp_register_script( 'aweber-elementor-script-handle', plugins_url('../src/js/aweber-elementor-script.js', __FILE__),
-			[ 'elementor-frontend' ], '1.0.0', true );
+			[ 'elementor-frontend' ], AWEBER_PLUGIN_VERSION, true );
 
 		if (is_admin()){
-			wp_enqueue_style( 'aweber-elementor-style-handle', plugins_url('../src/css/aweber-elementor-style.css', __FILE__));
+			wp_enqueue_style( 'aweber-elementor-style-handle', plugins_url('../src/css/aweber-elementor-style.css', __FILE__), [], AWEBER_PLUGIN_VERSION);
 		}
 
 		wp_localize_script( 'aweber-elementor-script-handle', 'php_vars', array(
@@ -75,7 +75,7 @@ class AWeberElementorWidget extends Widget_Base {
 	 * @return string Widget title.
 	 */
 	public function get_title() {
-		return __( 'AWeber', 'aweber' );
+		return __( 'AWeber', 'aweber-web-form-widget' );
 	}
 	
 	/**
@@ -115,7 +115,7 @@ class AWeberElementorWidget extends Widget_Base {
 		$this->start_controls_section(
 			'aweber_signup_form',
 			[
-				'label' => __( 'AWeber Configuration', 'aweber' ),
+				'label' => __( 'AWeber Configuration', 'aweber-web-form-widget' ),
 				'tab' => Controls_Manager::TAB_CONTENT,
 			]
 		);
@@ -127,16 +127,16 @@ class AWeberElementorWidget extends Widget_Base {
 			$this->add_control(
 				'important_note',
 				[
-					'label' => __( '', 'aweber' ),
+					'label' => '',
 					'type' => Controls_Manager::RAW_HTML,
-					'raw' => __( 'Loading the AWeber Sign Up Forms', 'aweber' ),
+					'raw' => __( 'Loading the AWeber Sign Up Forms', 'aweber-web-form-widget' ),
 				]
 			);
 
 			$this->add_control(
 				'aweber_list',
 				[
-					'label' => __( 'Lists', 'aweber' ),
+					'label' => __( 'Lists', 'aweber-web-form-widget' ),
 					'label_block' => true,
 					'type' => Controls_Manager::SELECT,
 					'default' => '0',
@@ -147,7 +147,7 @@ class AWeberElementorWidget extends Widget_Base {
 			$this->add_control(
 				'aweber_form',
 				[
-					'label' => __( 'Sign Up Forms & Split Tests', 'aweber' ),
+					'label' => __( 'Sign Up Forms & Split Tests', 'aweber-web-form-widget' ),
 					'label_block' => true,
 					'type' => Controls_Manager::SELECT,
 					'default' => '0',
@@ -158,9 +158,9 @@ class AWeberElementorWidget extends Widget_Base {
 			$this->add_control(
 				'aweber_connection_closed_message',
 				[
-					'label' => __( '', 'aweber' ),
+					'label' => '',
 					'type' => Controls_Manager::RAW_HTML,
-					'raw' => __( '<p style="text-align: center">Before using this element, please connect your AWeber account. <br><br><a href="'.admin_url('admin.php?page=aweber.php').'">Go to Plugin</a></p>', 'aweber' ),
+					'raw' => '<p style="text-align: center">Before using this element, please connect your AWeber account. <br><br><a href="'.admin_url('admin.php?page=aweber.php').'">Go to Plugin</a></p>', 'aweber-web-form-widget',
 				]
 			);
 		endif;
@@ -183,15 +183,15 @@ class AWeberElementorWidget extends Widget_Base {
         	$signup_form = explode('-', $settings['aweber_form']);
 
         	global $aweber_webform_plugin;
-        	echo $aweber_webform_plugin->aweberShortcodeHandler(array(
+        	echo wp_kses($aweber_webform_plugin->aweberShortcodeHandler(array(
         		'listid'	=> $signup_form[0],
         		'formid'	=> $signup_form[1],
         		'formtype'	=> $signup_form[2]
-        	));
+        	)));
 
-        	echo '<div style="display: none">
+        	echo wp_kses('<div style="display: none">
         		[aweber listid='.$signup_form[0].' formid='.$signup_form[1].' formtype='.$signup_form[2].']
-            </div>';
+            </div>');
         }
 	}
 

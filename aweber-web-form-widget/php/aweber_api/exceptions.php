@@ -40,9 +40,7 @@ class AWeberAPIException extends AWeberException {
  */
 class AWeberResourceNotImplemented extends AWeberException {
 
-    public function __construct($object, $value) {
-        $this->object = $object;
-        $this->value = $value;
+    public function __construct($value) {
         parent::__construct("Resource \"{$value}\" is not implemented on this resource.");
     }
 }
@@ -62,8 +60,7 @@ class AWeberResourceNotImplemented extends AWeberException {
  */
 class AWeberMethodNotImplemented extends AWeberException {
 
-    public function __construct($object) {
-        $this->object = $object;
+    public function __construct() {
         parent::__construct("This method is not implemented by the current resource.");
 
     }

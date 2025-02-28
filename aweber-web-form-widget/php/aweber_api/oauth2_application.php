@@ -125,12 +125,11 @@ class OAuth2Application {
         }
         // If the request failed, show the error message.
         $msg = '(' . $response->get_error_code() . ' - ' . $response->get_error_message() . ')';
-        $error = array(
-            'error_description' => 'Unable to connect to the AWeber API. ' . $msg,
+        throw new AWeberAPIException(array(
+            'error_description' => 'Unable to connect to the AWeber API. ' . esc_html($msg),
             'type' => 'APIUnreachableError',
             'documentation_url' => 'https://labs.aweber.com/docs/troubleshooting'
-        );
-        throw new AWeberAPIException($error, $url);
+        ), esc_url($url));
     }
 
     private function http_post($url, $requestBody) {
@@ -162,7 +161,7 @@ class OAuth2Application {
                 $response  = $this->http_get($url);
                 break;
             default:
-                throw new AWeberMethodNotImplemented('This method is not Implemeneted.');
+                throw new AWeberMethodNotImplemented();
         }
 
         $responseBody = json_decode($response->body, true);
@@ -171,20 +170,27 @@ class OAuth2Application {
         if ($response->headers['Status'] == 401
             && $responseBody['error'] == 'invalid_token'
         ) {
-            throw new AWeberOAuth2TokenExpired($responseBody['error'], 401);
+            throw new AWeberOAuth2TokenExpired('invalid token', 401);
         }
 
         // This happens, when the wrong or invalid authorization code is sent.
         if ($response->headers['Status'] == 400
             and $responseBody['error'] == 'invalid_request'
         ) {
-            throw new AWeberOAuth2Exception($responseBody['error'], 400);
+            throw new AWeberOAuth2Exception('invalid request', 400);
         }
 
         // This is used for all other AWeber API.
         if($response->headers['Status'] >= 400) {
             array_merge($responseBody, array('status', $response->headers['Status']));
-            throw new AWeberAPIException($responseBody['error'], $url);
+            $error = $responseBody['error'];
+            throw new AWeberAPIException(
+                array(
+                    'type' => esc_html($error['type']),
+                    'status' => esc_html($error['status']),
+                    'error_description' => esc_html($error['error_description']),
+                    'documentation_url' => esc_url($error['documentation_url']),
+                ), esc_url($url));
         }
         // If the Options are set, then return with respect to the options,
         // dont return whole response body.
@@ -302,7 +308,7 @@ class OAuth2Application {
             }
         }
         if (empty($options['allow_empty']) && !isset($responseBody)) {
-            throw new AWeberResponseError($uri);
+            throw new AWeberResponseError(esc_url($uri));
         }
         return $responseBody;
     }

@@ -108,7 +108,7 @@ class AWeberWebformPlugin {
         // Fetch Aweber account, using OAuth1 or OAuth2.
         $response = $this->getAWeberAccount($pluginAdminOptions, $oauth2TokensOptions);
         if (!isset($response['account'])) {
-            echo $response['message'];
+            echo esc_html($response['message']);
         } else {
             // Get AWeber account reference.
             $account = $response['account'];
@@ -120,16 +120,16 @@ class AWeberWebformPlugin {
                 ?>
                 <ul>
                     <li>
-                        <strong>List name: </strong><?php echo $list->name;?> <br>
+                        <strong>List name: </strong><?php echo esc_html($list->name); ?><br>
                     </li>
                     <li>
-                        <strong>Subscribed today to this list: </strong><?php echo $list->total_subscribers_subscribed_today;?> <br>
+                        <strong>Subscribed today to this list: </strong><?php echo esc_html($list->total_subscribers_subscribed_today); ?><br>
                     </li>
                     <li>
-                        <strong>Subscribed yesterday to this list: </strong><?php echo $list->total_subscribers_subscribed_yesterday;?> <br>
+                        <strong>Subscribed yesterday to this list: </strong><?php echo esc_html($list->total_subscribers_subscribed_yesterday); ?><br>
                     </li>
                     <li>
-                        <strong>Total subscribers on this list: </strong><?php echo $list->total_subscribed_subscribers;?> <br>
+                        <strong>Total subscribers on this list: </strong><?php echo esc_html($list->total_subscribed_subscribers); ?><br>
                     </li>
                 </ul>
                 <?php
@@ -150,16 +150,16 @@ class AWeberWebformPlugin {
                 ?>
                 <ul>
                     <li>
-                        <strong>List name: </strong><?php echo $list->name;?> <br>
+                        <strong>List name: </strong><?php echo esc_html($list->name); ?><br>
                     </li>
                     <li>
-                        <strong>Subscribed today to this list: </strong><?php echo $list->total_subscribers_subscribed_today;?> <br>
+                        <strong>Subscribed today to this list: </strong><?php echo esc_html($list->total_subscribers_subscribed_today); ?><br>
                     </li>
                     <li>
-                        <strong>Subscribed yesterday to this list: </strong><?php echo $list->total_subscribers_subscribed_yesterday;?> <br>
+                        <strong>Subscribed yesterday to this list: </strong><?php echo esc_html($list->total_subscribers_subscribed_yesterday); ?><br>
                     </li>
                     <li>
-                        <strong>Total subscribers on this list: </strong><?php echo $list->total_subscribed_subscribers;?> <br>
+                        <strong>Total subscribers on this list: </strong><?php echo esc_html($list->total_subscribed_subscribers); ?><br>
                     </li>
                 </ul>
                 <?php
@@ -204,20 +204,19 @@ class AWeberWebformPlugin {
         $widgets = get_option( 'dashboard_widget_options' );
 
         # Display the AWeber Dashboard Header. Icon and version
-        echo '<div class="aweber-dashboard-header">
+        echo wp_kses_post('<div class="aweber-dashboard-header">
                 <div class="aw-logo">
                     <img style="width: 100%" src="'.$widgets['aweber_dashboard_widget']['logo'].'" />
                 </div>
                 <div class="aw-versions">
                     <span>AWeber for WordPress ' . $widgets['aweber_dashboard_widget']['version'] . '</span>
                 </div>
-            </div>';
+            </div>');
 
-        $loading = '<p class="widget-loading hide-if-no-js">' . __( 'Loading&#8230;' ) . '</p><p class="hide-if-js">' . __( 'This widget requires JavaScript.' ) . '</p>';
-
+        $loading = '<p class="widget-loading hide-if-no-js">' . __( 'Loading&#8230;', 'aweber-web-form-widget' ) . '</p><p class="hide-if-js">' . __( 'This widget requires JavaScript.', 'aweber-web-form-widget' ) . '</p>';
         if ( empty($check_urls) ) {
             if ( empty($widgets[$widget_id]['url']) ) {
-                echo $loading;
+                echo wp_kses_post($loading);
                 return false;
             }
             $check_urls = array( $widgets[$widget_id]['url'] );
@@ -227,7 +226,7 @@ class AWeberWebformPlugin {
 
         $cache_key = 'dash_' . md5( $widget_id );
         if ( false !== ( $output = get_transient( $cache_key ) ) ) {
-            echo $output;
+            echo wp_kses_post($output);
             return true;
         }
 
@@ -253,9 +252,9 @@ class AWeberWebformPlugin {
                 'show_date' => 1,
             ));
         }
-        $widget_options['aweber_dashboard_widget']['link'] = apply_filters('aweber_dashboard_widget_link',  __('https://www.aweber.com/blog/'));
-        $widget_options['aweber_dashboard_widget']['url'] = apply_filters('aweber_dashboard_widget_url',  __('https://www.aweber.com/blog/feed'));
-        $widget_options['aweber_dashboard_widget']['title'] = apply_filters('aweber_dashboard_widget_title',  __('AWeber Overview'));
+        $widget_options['aweber_dashboard_widget']['link'] = apply_filters('aweber_dashboard_widget_link', __('https://www.aweber.com/blog/', 'aweber-web-form-widget'));
+        $widget_options['aweber_dashboard_widget']['url'] = apply_filters('aweber_dashboard_widget_url', __('https://www.aweber.com/blog/feed', 'aweber-web-form-widget'));
+        $widget_options['aweber_dashboard_widget']['title'] = apply_filters('aweber_dashboard_widget_title', __('AWeber Overview', 'aweber-web-form-widget'));
         $plugin_path = join(DIRECTORY_SEPARATOR, array(dirname(__FILE__), '..', 'aweber.php'));
         $widget_options['aweber_dashboard_widget']['version'] = 'v' . get_plugin_data($plugin_path)['Version'];
         $widget_options['aweber_dashboard_widget']['logo'] = plugin_dir_url(__FILE__) . '../AWeber_widget_blue.png';
@@ -304,7 +303,7 @@ class AWeberWebformPlugin {
         <p>
         <input value="1" id="aweber_checkbox" type="checkbox" style="width:inherit;" name="aweber_signup_checkbox"/>
             <label for="aweber_checkbox">
-            <?php echo $options[$key]; ?>
+            <?php echo esc_html($options[$key]); ?>
             </label>
         </p>
         </br>
@@ -579,7 +578,27 @@ class AWeberWebformPlugin {
             $svg = '<svg xmlns="https://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24px" height="24px" xmlns:xlink="https://www.w3.org/1999/xlink" role="img" data-src="assets/toolkit/images/svg/alert.svg" class="injected-svg icon"><path d="M22.3 11.3l-9.6-9.6c-.4-.4-1-.4-1.4 0l-9.6 9.6c-.4.4-.4 1 0 1.4l9.6 9.6c.4.4 1 .4 1.4 0l9.6-9.6c.4-.4.4-1 0-1.4zM10.8 6.9c0-.7.6-1.2 1.2-1.2s1.2.6 1.2 1.2v6.4c0 .7-.6 1.2-1.2 1.2s-1.2-.6-1.2-1.2V6.9zM12 18.5c-.7 0-1.3-.6-1.3-1.3s.6-1.3 1.3-1.3 1.3.6 1.3 1.3-.6 1.3-1.3 1.3z" role="presentation"></path></svg>';
         }
         $css_class_names .= ' ' . $extra_classes;
-        echo '<div class="aweber-alert ' . $css_class_names . '">' . $svg . '<p>'.  $message . '</p></div>';
+        $kses_defaults = wp_kses_allowed_html( 'post' );
+        $svg_args = array(
+            'svg'   => array(
+                'class'           => true,
+                'aria-hidden'     => true,
+                'aria-labelledby' => true,
+                'role'            => true,
+                'xmlns'           => true,
+                'width'           => true,
+                'height'          => true,
+                'viewbox'         => true
+            ),
+            'g'     => array( 'fill' => true ),
+            'title' => array( 'title' => true ),
+            'path'  => array( 
+                'd'               => true, 
+                'fill'            => true  
+            )
+        );
+        $allowed_tags = array_merge( $kses_defaults, $svg_args );
+        echo wp_kses( '<div class="aweber-alert ' . $css_class_names . '">' . $svg . '<p>'.  $message . '</p></div>', $allowed_tags );
     }
 
     /**
@@ -598,7 +617,7 @@ class AWeberWebformPlugin {
             && !empty($options['aweber_analytics_src'])) {
 
             // Parameters: $handle, $src, $deps, $ver, $in_footer
-            wp_enqueue_script( 'script', $options['aweber_analytics_src'], false, null, false);
+            wp_enqueue_script( 'script', $options['aweber_analytics_src'], [], AWEBER_PLUGIN_VERSION, false);
         }
     }
 
@@ -712,9 +731,15 @@ class AWeberWebformPlugin {
             $args['offset'] += count($result);
         } while (count($result) >= $args['numberposts']);
 
-        $query = $wpdb->prepare("SELECT option_name FROM {$wpdb->prefix}options WHERE
-           option_value LIKE %s AND option_name LIKE %s", ['%[aweber %', 'widget_%']);
-        $this->fetchShortCodesFromWidgetContent($wpdb->get_results($query), $shortcodes);
+        $this->fetchShortCodesFromWidgetContent(
+            $wpdb->get_results(
+                $wpdb->prepare(
+                    "SELECT option_name FROM {$wpdb->prefix}options WHERE option_value LIKE %s AND option_name LIKE %s",
+                    ['%[aweber %', 'widget_%']
+                )
+            ),
+            $shortcodes
+        );
         return $shortcodes;
     }
 
@@ -783,7 +808,7 @@ class AWeberWebformPlugin {
             $links = array(); 
         $links[$landing_page_id] = array(
             'post_id'   => $post_id,
-            'synced_on' => date('Y-m-d H:i:s'),
+            'synced_on' => gmdate('Y-m-d H:i:s'),
         );
         update_option('aweber_landing_page_links', $links);
     }
@@ -795,7 +820,7 @@ class AWeberWebformPlugin {
             if ($page) {
                 return array(
                     'post_id'  => $page->ID,
-                    'synced_on' => date('D, M j, Y, g:i A T', strtotime($links[$landing_page_id]['synced_on'])),
+                    'synced_on' => gmdate('D, M j, Y, g:i A T', strtotime($links[$landing_page_id]['synced_on'])),
                     'page_path' => '/' . $page->post_name,
                     'page_title' => $page->post_title,
                     'page_link' => get_permalink($page->ID)
@@ -853,7 +878,7 @@ class AWeberWebformPlugin {
                         'id'    => $page['id'],
                         'name'  => is_null($page['name']) ? 'Untitled Landing Page': $page['name'],
                         'preview'   => $page['published_url'],
-                        'published_date'  => date('D, M j, Y, g:i A T', strtotime($page['published_at'])),
+                        'published_date'  => gmdate('D, M j, Y, g:i A T', strtotime($page['published_at'])),
                         'link_date' => 'NA',
                         'post_id'   => 0,
                         'page_title'=> '-',
@@ -905,7 +930,7 @@ class AWeberWebformPlugin {
         unset($post['post_modified_gmt']);
         # So that, it will visible only to admin users.
         $post['post_status'] = 'private';
-        $post['post_title'] = $post['post_title'] . ' (' . date("c") . ')';
+        $post['post_title'] = $post['post_title'] . ' (' . gmdate("c") . ')';
 
         // Insert the post into the database
         wp_insert_post($post);
@@ -959,14 +984,18 @@ class AWeberWebformPlugin {
     public function getPreviousPostContent($post_id) {
         $current_post = get_post($post_id);
         # Parse the URL and get the query param.
-        $query_param = parse_url($current_post->guid, PHP_URL_QUERY);
+        $query_param = wp_parse_url($current_post->guid, PHP_URL_QUERY);
         global $wpdb;
 
         # By using the guid value from current_post, get the previous post_id.
-        $query = $wpdb->prepare("SELECT * FROM {$wpdb->prefix}posts WHERE
-          ID != %d AND post_status NOT IN ('trash', 'inherit') AND guid LIKE %s
-          ORDER BY ID DESC LIMIT 1", [$post_id, '%?' . $query_param]);
-        $previous_post = $wpdb->get_results($query);
+        $previous_post = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT * FROM {$wpdb->prefix}posts WHERE
+                ID != %d AND post_status NOT IN ('trash', 'inherit') AND guid LIKE %s
+                ORDER BY ID DESC LIMIT 1",
+                [$post_id, '%?' . $query_param]
+            )
+        );
         if (empty($previous_post)) {
             return False;
         }
@@ -1383,26 +1412,27 @@ class AWeberWebformPlugin {
                 $register_aweber_service_worker = true;
             }
         }
+        // Register/Unregister the AWeber Service Worker
+        wp_register_script( 'aweber-wpn-script-handle', plugins_url('../src/js/aweber-wpn-script.js', __FILE__), [], AWEBER_PLUGIN_VERSION, false);
         ?>
-        <!-- Register/Unregister the AWeber Service Worker -->
-        <script async src="<?php echo plugins_url('../src/js/aweber-wpn-script.js', __FILE__); ?>"></script>
         <script type="text/javascript">
             var aweber_wpn_vars = {
-                plugin_base_path: '<?php echo plugin_dir_url(__FILE__); ?>',
-                register_aweber_service_worker: '<?php echo $register_aweber_service_worker; ?>',
+                plugin_base_path: '<?php echo esc_html(plugin_dir_url(__FILE__)); ?>',
+                register_aweber_service_worker: '<?php echo esc_html($register_aweber_service_worker); ?>',
             };
         </script>
 
-        <?php if ($register_aweber_service_worker): ?>
-            <!-- AWeber Web Push Notification Snippet -->
-            <script async src="https://assets.aweber-static.com/aweberjs/aweber.js"></script>
+        <?php if ($register_aweber_service_worker):
+            // AWeber Web Push Notification Snippet
+            wp_register_script( 'aweber-wpn-static-assests', 'https://assets.aweber-static.com/aweberjs/aweber.js', [],AWEBER_PLUGIN_VERSION, false);
+        ?>
             <script>
                 var AWeber = window.AWeber || [];
                 AWeber.push(function() {
                     AWeber.WebPush.init(
-                        '<?php echo $aweber_wpn_details["vapid_public_key"] ?>',
-                        '<?php echo $aweber_wpn_details["account_uuid"] ?>',
-                        '<?php echo $aweber_wpn_details["list_uuid"] ?>',
+                        '<?php echo esc_html($aweber_wpn_details["vapid_public_key"]) ?>',
+                        '<?php echo esc_html($aweber_wpn_details["account_uuid"]) ?>',
+                        '<?php echo esc_html($aweber_wpn_details["list_uuid"]) ?>',
                     );
                 });
             </script>
@@ -1419,23 +1449,23 @@ class AWeberWebformPlugin {
         extract($args, EXTR_SKIP);
 
         if (isset($before_widget) && !empty($before_widget)) {
-            echo $before_widget;
+            echo wp_kses_post($before_widget);
         }
 
         if (isset($before_title) && !empty($before_title)) {
-            echo $before_title;
+            echo wp_kses_post($before_title);
         }
         if (isset($title) && !empty($title)) {
-            echo $title;
+            echo wp_kses_post($title);
         }
         if (isset($after_title) && !empty($after_title)) {
-            echo $after_title;
+            echo wp_kses_post($after_title);
         }
 
-        echo '<!-- AWeber for WordPress ' . AWEBER_PLUGIN_VERSION . ' -->' . $this->getWebformSnippet();
+        echo wp_kses_post('<!-- AWeber for WordPress ' . AWEBER_PLUGIN_VERSION . ' -->' . $this->getWebformSnippet());
 
         if (isset($after_widget) && !empty($after_widget)) {
-            echo $after_widget;
+            echo wp_kses_post($after_widget);
         }
     }
 
@@ -1568,7 +1598,7 @@ class AWeberWebformPlugin {
                     if (d.getElementById(id)) return; js = d.createElement(s);
                     js.id = id; js.src = "'.$this->_getWebformJsUrl($this_form).'";
                     fjs.parentNode.insertBefore(js, fjs);
-                    }(document, "script", "aweber-wjs-'.(string)rand().'"));
+                    }(document, "script", "aweber-wjs-'.(string)wp_rand().'"));
                 </script>';
         } else {
             $options['form_snippet'] = '<div class="AW-Form-' . $this_form->id . '"></div>
@@ -1578,7 +1608,7 @@ class AWeberWebformPlugin {
                     if (d.getElementById(id)) return; js = d.createElement(s);
                     js.id = id; js.src = "' . $this->_getWebformJsUrl($this_form) . '";
                     fjs.parentNode.insertBefore(js, fjs);
-                    }(document, "script", "aweber-wjs-' . (string)rand() . '"));
+                    }(document, "script", "aweber-wjs-' . (string)wp_rand() . '"));
                 </script>';
         }
         return $options;
@@ -1624,21 +1654,25 @@ class AWeberWebformPlugin {
             echo "<p class='aweber-legacy-message' style='font-size: 12px;'>You are using our legacy WordPress widget. Please remove and re-add the widget.</p>";
         } else {
             ?>
-            <div id="<?php echo $this->widgetOptionsName; ?>-content" class="<?php echo $this->widgetOptionsName; ?>-content"><img src="images/loading.gif" height="16" width="16" id="aweber-webform-loading" style="float: left; padding-right: 5px" /> Loading...</div>
-            <script type="text/javascript" >
-
+            <div 
+                id="<?php echo esc_attr($this->widgetOptionsName . '-content'); ?>" 
+                class="<?php echo esc_attr($this->widgetOptionsName . '-content'); ?>">
+                <img src="images/loading.gif" height="16" width="16" id="aweber-webform-loading" style="float: left; padding-right: 5px" />
+                 Loading...
+            </div>
+            <script type="text/javascript">
             jQuery(document).ready(function($) {
-                if (typeof(<?php echo $this->widgetOptionsName; ?>) != 'undefined') { return; }
-                <?php echo $this->widgetOptionsName; ?> = true;
+                if (typeof(<?php echo esc_html($this->widgetOptionsName); ?>) != 'undefined') { return; }
+                <?php echo esc_html($this->widgetOptionsName); ?> = true;
 
                 var data = {
                     action: 'get_widget_control'
-                    nonce: '<?php echo wp_create_nonce('get_widget_control'); ?>'
+                    nonce: '<?php echo esc_html(wp_create_nonce('get_widget_control')); ?>'
                 };
 
                 // since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
                 jQuery.post(ajaxurl, data, function(response) {
-                    var primary_content = jQuery('.<?php echo $this->widgetOptionsName; ?>-content');
+                    var primary_content = jQuery('.<?php echo esc_attr($this->widgetOptionsName . '-content'); ?>');
                     primary_content.each(function() { jQuery(this).html(response); });
                 });
             });
@@ -1911,7 +1945,7 @@ class AWeberWebformPlugin {
         // Fetch Aweber account, using OAuth1 or OAuth2.
         $response = $this->getAWeberAccount($admin_options, $oauth2TokensOptions);
         if (!isset($response['account'])) {
-            echo $this->messages['auth_error'];
+            echo wp_kses_post($this->messages['auth_error']);
             return $this->_end_response();
         }
         // Get the AWeber account reference.
@@ -1950,32 +1984,46 @@ class AWeberWebformPlugin {
         // The HTML form will go here
 ?>
 <?php if (!empty($list_web_forms)): ?>
-<select class="widefat <?php echo $this->widgetOptionsName; ?>-list" name="<?php echo $this->widgetOptionsName; ?>[list]" id="<?php echo $this->widgetOptionsName; ?>-list" style="margin-top: 13px; margin-bottom: 13px;">
+<select 
+    class="widefat <?php echo esc_attr($this->widgetOptionsName . '-list'); ?>" 
+    name="<?php echo esc_attr($this->widgetOptionsName . '[list]'); ?>" 
+    id="<?php echo esc_attr($this->widgetOptionsName . '-list'); ?>" 
+    style="margin-top: 13px; margin-bottom: 13px;">
     <option value="">Step 1: Select A List</option>
     <?php foreach ($list_web_forms as $this_list_data): ?>
     <?php $this_list = $this_list_data['list']; ?>
-    <option value="<?php echo $this_list->id; ?>"<?php echo ($this_list->id == $list) ? ' selected="selected"' : ""; ?>><?php echo $this_list->name; ?></option>
+    <option value="<?php echo esc_html($this_list->id); ?>"<?php echo ($this_list->id == $list) ? ' selected="selected"' : ""; ?>>
+        <?php echo esc_html($this_list->name); ?>
+    </option>
     <?php endforeach; ?>
 </select>
 
 <?php foreach ($list_web_forms as $this_list_id => $forms): ?>
-<select class="widefat <?php echo $this->widgetOptionsName; ?>-form-select <?php echo $this->widgetOptionsName; ?>-<?php echo $this_list_id; ?>-webform" name="<?php echo $this->widgetOptionsName; ?>[<?php echo $this_list_id; ?>][webform]" id="<?php echo $this->widgetOptionsName; ?>-<?php echo $this_list_id; ?>-webform" style="margin-bottom: 13px;">
+<select 
+    class="widefat <?php echo esc_attr($this->widgetOptionsName . '-form-select'); ?> <?php echo esc_html($this->widgetOptionsName); ?>-<?php echo esc_html($this_list_id); ?>-webform" 
+    name="<?php echo esc_html($this->widgetOptionsName); ?>[<?php echo esc_html($this_list_id); ?>][webform]" 
+    id="<?php echo esc_html($this->widgetOptionsName); ?>-<?php echo esc_html($this_list_id); ?>-webform" 
+    style="margin-bottom: 13px;">
     <option value="">Step 2: Select A Sign Up Form</option>
     <?php foreach ($forms['web_forms'] as $this_form): ?>
-    <option value="<?php echo $this_form->url; ?>"<?php echo ($this_form->url == $webform) ? ' selected="selected"' : ''; ?>><?php echo $this_form->name; ?></option>
+        <option value="<?php echo esc_url($this_form->url); ?>"<?php echo ($this_form->url == $webform) ? ' selected="selected"' : ''; ?>>
+            <?php echo esc_html($this_form->name); ?>
+        </option>
     <?php endforeach; ?>
     <?php foreach ($forms['split_tests'] as $this_form): ?>
-    <option value="<?php echo $this_form->url; ?>"<?php echo ($this_form->url == $webform) ? ' selected="selected"' : ''; ?>>Split test: <?php echo $this_form->name; ?></option>
+        <option value="<?php echo esc_url($this_form->url); ?>"<?php echo ($this_form->url == $webform) ? ' selected="selected"' : ''; ?>>
+            Split test: <?php echo esc_html($this_form->name); ?>
+        </option>
     <?php endforeach; ?>
 </select>
 <?php endforeach; ?>
 
 <input type="hidden"
-    name="<?php echo $this->widgetOptionsName; ?>[submit]"
+    name="<?php echo esc_html($this->widgetOptionsName); ?>[submit]"
     value="1"/>
 
 <div style="margin-bottom: 13px;">
-<a id="<?php echo $this->widgetOptionsName; ?>-form-preview" class="<?php echo $this->widgetOptionsName; ?>-form-preview" href="#" target="_blank">Preview form</a>
+<a id="<?php echo esc_html($this->widgetOptionsName); ?>-form-preview" class="<?php echo esc_html($this->widgetOptionsName); ?>-form-preview" href="#" target="_blank">Preview form</a>
 </div>
 <?php else: ?>
 This AWeber account does not currently have any completed Sign Up Forms.
@@ -1987,13 +2035,13 @@ This AWeber account does not currently have any completed Sign Up Forms.
 <script type="text/javascript">
     jQuery(document).ready(function() {
         function hideFormSelectors() {
-            jQuery('.<?php echo $this->widgetOptionsName; ?>-form-select').each(function() {
+            jQuery('.<?php echo esc_attr($this->widgetOptionsName . '-form-select'); ?>').each(function() {
                 jQuery(this).hide();
             });
         }
 
         function listDropDown() {
-            return jQuery('.<?php echo $this->widgetOptionsName; ?>-list');
+            return jQuery('.<?php echo esc_attr($this->widgetOptionsName . '-list'); ?>');
         }
 
         function currentFormDropDown() {
@@ -2002,7 +2050,7 @@ This AWeber account does not currently have any completed Sign Up Forms.
                 list = jQuery(this).val();
             });
             if (list != "") {
-                return jQuery('.<?php echo $this->widgetOptionsName; ?>-' + list + '-webform');
+                return jQuery('.<?php echo esc_html($this->widgetOptionsName); ?>'. '-' + list + '-webform');
             }
             return undefined;
         }
@@ -2019,7 +2067,7 @@ This AWeber account does not currently have any completed Sign Up Forms.
 
         function updatePreviewLink() {
             var form_url = "";
-            var preview = jQuery('.<?php echo $this->widgetOptionsName; ?>-form-preview');
+            var preview = jQuery('.<?php echo esc_attr($this->widgetOptionsName . '-form-preview'); ?>');
             var form_dropdown = currentFormDropDown();
             if (form_dropdown != undefined) {
                 form_dropdown.each(function() {
@@ -2054,7 +2102,7 @@ This AWeber account does not currently have any completed Sign Up Forms.
         updateViewableFormSelector();
         updatePreviewLink();
 
-        jQuery(document.body).on('change', '.<?php echo $this->widgetOptionsName; ?>-list', function() {
+        jQuery(document.body).on('change', '.<?php echo esc_attr($this->widgetOptionsName . '-list'); ?>', function() {
             updateViewableFormSelector();
             var form_dropdown = currentFormDropDown();
             if (form_dropdown !== undefined) {
@@ -2062,7 +2110,7 @@ This AWeber account does not currently have any completed Sign Up Forms.
             }
             updatePreviewLink();
         });
-        jQuery('.<?php echo $this->widgetOptionsName; ?>-form-select').each(function() {
+        jQuery('.<?php echo esc_attr($this->widgetOptionsName . '-form-select'); ?>').each(function() {
             jQuery(this).change(function() {
                 updatePreviewLink();
             });

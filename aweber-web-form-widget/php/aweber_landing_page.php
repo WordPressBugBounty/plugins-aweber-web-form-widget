@@ -16,7 +16,12 @@
 
 				<div class="list-dropdown">
 					<label>List: </label>
-					<select data-selected="<?php echo $options['selected_landing_page_list_id']; ?>" class="<?php echo $this->widgetOptionsName; ?>-list" data-type="landing_pages" name="<?php echo $this->widgetOptionsName; ?>[list]" id="<?php echo $this->widgetOptionsName; ?>-list">
+					<select
+						data-selected="<?php echo esc_attr($options['selected_landing_page_list_id']); ?>" 
+						class="<?php echo esc_attr($this->widgetOptionsName . '-list'); ?>" 
+						data-type="landing_pages" 
+						name="<?php echo esc_attr($this->widgetOptionsName . '[list]'); ?>" 
+						id="<?php echo esc_attr($this->widgetOptionsName . '-list'); ?>">
                         <option value="False">Loading AWeber lists</option>
 					</select>
 					<a type="button" href="https://www.aweber.com/users/landing_pages/create" target="_blank" class="aweber-btn aweber-btn-success aweber-marginl10">Create</a>

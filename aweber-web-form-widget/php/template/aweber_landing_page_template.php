@@ -1,5 +1,12 @@
 <?php
    global $post;
+   /* Load and display the synchronized landing page content.
+    *
+    * The landing page HTML is echoed out as-is. It has already passed security
+    * controls and sanitization on the AWeber side, and must be preserved to
+    * maintain full functionality here.
+    */
+
    $content = get_post_field('post_content', $post->ID);
 
    # Extract Head from the Content
