@@ -5,6 +5,7 @@ var custom_fields = [];
 var get_aweber_shortcodes_ajax = null;
 var get_aweber_lists_ajax = null;
 var elementor_control_aweber_form_submit_added = false;
+var elementor_control_aweber_widget_added = false;
 var elementor_control_aweber_form_submit_observer = null;
 var elementor_control_aweber_widget_observer = null;
 
@@ -394,16 +395,21 @@ function load_aweber_list(panel, model) {
 jQuery( window ).on( 'elementor/frontend/init', () => {
     if (typeof elementor !== 'undefined') {
         elementor.hooks.addAction( 'panel/open_editor/widget/aweber', function(panel, model, view) {
-            // Init the AWeber elements.
-            init_aweber_elements(panel, model, view);
             if (elementor_control_aweber_widget_observer) {
                 // Disconnect the observer if already connected.
                 elementor_control_aweber_widget_observer.disconnect();
             }
             elementor_control_aweber_widget_observer = new MutationObserver((mutationList, observer) => {
                 if (panel.$el.hasClass('elementor-control-aweber_form') || panel.$el.find('.elementor-control-aweber_form').length) {
-                    init_aweber_elements(panel, model, view);
-                } else if (panel.$el.find('#elementor-panel-header-title').text().includes('AWeber') === false) {
+                    if (elementor_control_aweber_widget_added === false) {
+                        init_aweber_elements(panel, model, view);
+                        elementor_control_aweber_widget_added = true;
+                    }
+                } else {
+                    elementor_control_aweber_widget_added = false;
+                }
+
+                if (panel.$el.find('#elementor-panel-header-title').text().includes('AWeber') === false) {
                     // AWeber Panel got closed. so disconnect the observer.
                     observer.disconnect();
                     elementor_control_aweber_widget_observer = null;

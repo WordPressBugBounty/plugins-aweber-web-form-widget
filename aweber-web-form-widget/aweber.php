@@ -5,7 +5,7 @@ use AWeberWebFormPluginNamespace as AWeberWebformPluginAlias;
 Plugin Name: AWeber for WordPress
 Plugin URI: http://www.aweber.com/faq/questions/588/How+Do+I+Use+AWeber%27s+Webform+Widget+for+Wordpress%3F
 Description: Add AWeber Landing Pages and Sign Up Forms to your WordPress site
-Version: 7.3.22
+Version: 7.3.23
 Author: AWeber
 Author URI: http://www.aweber.com
 License: MIT
@@ -13,7 +13,7 @@ License: MIT
 
 
 // Defined the AWeber Wordpress plugin version that can be used accross the plugin.
-define ('AWEBER_PLUGIN_VERSION', 'v7.3.22');
+define ('AWEBER_PLUGIN_VERSION', 'v7.3.23');
 
 function AWeberMandatoryPHPVersionMessage() {
     global $aweber_webform_plugin;
@@ -377,7 +377,7 @@ if (isset($aweber_webform_plugin)) {
     // Update AWeber WPN Script or Snippets. 99999999 is the priority value to call at last.
     add_action('wp_footer', array(&$aweber_webform_plugin, 'printAWeberWPNSnippet'), 999);
 
-    // Triggers teh AWeber ShortCode.
+    // Triggers the AWeber ShortCode.
     add_shortcode('aweber', array(&$aweber_webform_plugin, 'aweberShortcodeHandler'));
 
     add_action('admin_enqueue_scripts', 'load_admin_page_styles');

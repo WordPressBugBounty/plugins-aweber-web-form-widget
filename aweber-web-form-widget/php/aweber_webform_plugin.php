@@ -578,27 +578,8 @@ class AWeberWebformPlugin {
             $svg = '<svg xmlns="https://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24px" height="24px" xmlns:xlink="https://www.w3.org/1999/xlink" role="img" data-src="assets/toolkit/images/svg/alert.svg" class="injected-svg icon"><path d="M22.3 11.3l-9.6-9.6c-.4-.4-1-.4-1.4 0l-9.6 9.6c-.4.4-.4 1 0 1.4l9.6 9.6c.4.4 1 .4 1.4 0l9.6-9.6c.4-.4.4-1 0-1.4zM10.8 6.9c0-.7.6-1.2 1.2-1.2s1.2.6 1.2 1.2v6.4c0 .7-.6 1.2-1.2 1.2s-1.2-.6-1.2-1.2V6.9zM12 18.5c-.7 0-1.3-.6-1.3-1.3s.6-1.3 1.3-1.3 1.3.6 1.3 1.3-.6 1.3-1.3 1.3z" role="presentation"></path></svg>';
         }
         $css_class_names .= ' ' . $extra_classes;
-        $kses_defaults = wp_kses_allowed_html( 'post' );
-        $svg_args = array(
-            'svg'   => array(
-                'class'           => true,
-                'aria-hidden'     => true,
-                'aria-labelledby' => true,
-                'role'            => true,
-                'xmlns'           => true,
-                'width'           => true,
-                'height'          => true,
-                'viewbox'         => true
-            ),
-            'g'     => array( 'fill' => true ),
-            'title' => array( 'title' => true ),
-            'path'  => array( 
-                'd'               => true, 
-                'fill'            => true  
-            )
-        );
-        $allowed_tags = array_merge( $kses_defaults, $svg_args );
-        echo wp_kses( '<div class="aweber-alert ' . $css_class_names . '">' . $svg . '<p>'.  $message . '</p></div>', $allowed_tags );
+        echo wp_kses(
+            '<div class="aweber-alert ' . $css_class_names . '">' . $svg . '<p>'.  $message . '</p></div>', $this->getAllowedTags());
     }
 
     /**
@@ -2131,6 +2112,34 @@ This AWeber account does not currently have any completed Sign Up Forms.
     function getWebformSnippet() {
         $options = get_option($this->widgetOptionsName);
         return $options['form_snippet'];
+    }
+
+    function getAllowedTags() {
+        return array_merge(wp_kses_allowed_html('post'), array(
+            'svg'   => array(
+                'class'           => true,
+                'aria-hidden'     => true,
+                'aria-labelledby' => true,
+                'role'            => true,
+                'xmlns'           => true,
+                'width'           => true,
+                'height'          => true,
+                'viewbox'         => true
+            ),
+            'g'     => array( 'fill' => true ),
+            'title' => array( 'title' => true ),
+            'path'  => array( 
+                'd'               => true, 
+                'fill'            => true  
+            ),
+            'style' => array(
+              'type' => 'text/css',
+            ),
+            'script' => array(
+              'type' => 'text/javascript',
+              'href' => true,
+            ),
+        ));
     }
 }
 ?>

@@ -187,11 +187,7 @@ class AWeberElementorWidget extends Widget_Base {
         		'listid'	=> $signup_form[0],
         		'formid'	=> $signup_form[1],
         		'formtype'	=> $signup_form[2]
-        	)));
-
-        	echo wp_kses('<div style="display: none">
-        		[aweber listid='.$signup_form[0].' formid='.$signup_form[1].' formtype='.$signup_form[2].']
-            </div>');
+        	)), $aweber_webform_plugin->getAllowedTags());
         }
 	}
 
