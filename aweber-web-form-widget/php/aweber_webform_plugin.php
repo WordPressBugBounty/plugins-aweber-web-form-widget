@@ -195,14 +195,12 @@ class AWeberWebformPlugin {
                 </ul>
             </div>';
     }
-
     /* Copied from WP code
     /  Modified to remove doing_AJAX global
     */
     function aweber_wp_dashboard_cached_rss_widget( $widget_id, $callback, $check_urls = array() ) {
         # Get AWeber Widget options.
         $widgets = get_option( 'dashboard_widget_options' );
-
         # Display the AWeber Dashboard Header. Icon and version
         echo wp_kses_post('<div class="aweber-dashboard-header">
                 <div class="aw-logo">
@@ -219,25 +217,19 @@ class AWeberWebformPlugin {
                 echo wp_kses_post($loading);
                 return false;
             }
-            $check_urls = array( $widgets[$widget_id]['url'] );
         }
         # Display the AWeber Feed Header
         echo '<div class="aweber-dashboard-feed"><h3>News &amp; Updates</h3></div>';
-
         $cache_key = 'dash_' . md5( $widget_id );
         if ( false !== ( $output = get_transient( $cache_key ) ) ) {
             echo wp_kses_post($output);
             return true;
         }
-
         if ( $callback && is_callable( $callback ) ) {
-            $args = array_slice( func_get_args(), 2 );
-            array_unshift( $args, $widget_id );
             ob_start();
-            call_user_func_array( $callback, $args );
+            call_user_func_array( $callback, array($widget_id) );
             set_transient( $cache_key, ob_get_flush(), 43200); // Default lifetime in cache of 12 hours (same as the feeds)
         }
-
         return true;
     }
 
@@ -1394,19 +1386,14 @@ class AWeberWebformPlugin {
             }
         }
         // Register/Unregister the AWeber Service Worker
-        wp_register_script( 'aweber-wpn-script-handle', plugins_url('../src/js/aweber-wpn-script.js', __FILE__), [], AWEBER_PLUGIN_VERSION, false);
-        ?>
-        <script type="text/javascript">
-            var aweber_wpn_vars = {
-                plugin_base_path: '<?php echo esc_html(plugin_dir_url(__FILE__)); ?>',
-                register_aweber_service_worker: '<?php echo esc_html($register_aweber_service_worker); ?>',
-            };
-        </script>
-
-        <?php if ($register_aweber_service_worker):
+        wp_enqueue_script( 'aweber-wpn-script-handle', plugins_url('../src/js/aweber-wpn-script.js', __FILE__), [], AWEBER_PLUGIN_VERSION, false);
+        wp_localize_script( 'aweber-wpn-script-handle', 'aweber_wpn_vars', array(
+            'plugin_base_path' => esc_html(plugin_dir_url(__FILE__)),
+            'register_aweber_service_worker' => esc_html($register_aweber_service_worker)
+        ));
+        if ($register_aweber_service_worker):
             // AWeber Web Push Notification Snippet
-            wp_register_script( 'aweber-wpn-static-assests', 'https://assets.aweber-static.com/aweberjs/aweber.js', [],AWEBER_PLUGIN_VERSION, false);
-        ?>
+            wp_enqueue_script( 'aweber-wpn-static-assests', 'https://assets.aweber-static.com/aweberjs/aweber.js' ); ?>
             <script>
                 var AWeber = window.AWeber || [];
                 AWeber.push(function() {
