@@ -55,6 +55,7 @@ interface OAuthServiceProvider {
  * @package
  * @version $id$
  */
+#[\AllowDynamicProperties]
 class OAuthApplication implements AWeberOAuthAdapter {
     public $debug = false;
 

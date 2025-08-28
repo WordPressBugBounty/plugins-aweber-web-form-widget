@@ -24,6 +24,7 @@ class AWeberOAuth2ServiceProvider {
 }
 
 
+#[\AllowDynamicProperties]
 class OAuth2Application {
 
     // Option Name to store the OAuth2 tokens in Database.

@@ -5,7 +5,7 @@ use AWeberWebFormPluginNamespace as AWeberWebformPluginAlias;
 Plugin Name: AWeber for WordPress
 Plugin URI: http://www.aweber.com/faq/questions/588/How+Do+I+Use+AWeber%27s+Webform+Widget+for+Wordpress%3F
 Description: Add AWeber Landing Pages and Sign Up Forms to your WordPress site
-Version: 7.3.26
+Version: 7.3.27
 Author: AWeber
 Author URI: http://www.aweber.com
 License: MIT
@@ -13,11 +13,15 @@ License: MIT
 
 
 // Defined the AWeber Wordpress plugin version that can be used accross the plugin.
-define ('AWEBER_PLUGIN_VERSION', 'v7.3.26');
+define ('AWEBER_PLUGIN_VERSION', 'v7.3.27');
+define ('AWEBER_PHP_MIN_VERSION', '7.2');
 
 function AWeberMandatoryPHPVersionMessage() {
     global $aweber_webform_plugin;
-    $aweber_webform_plugin->add_alert_message_html('negative', 'Sorry, AWeber Sign Up Form requires PHP 5.6 or higher. Please deactivate AWeber Sign Up Form.', 'aweber-version-message');
+    $aweber_webform_plugin->add_alert_message_html(
+        'negative',
+        sprintf('Sorry, AWeber Sign Up Form requires PHP %s or higher. Please deactivate AWeber Sign Up Form.', AWEBER_PHP_MIN_VERSION),
+        'aweber-version-message');
 }
 
 // Initialize plugin.
@@ -326,7 +330,7 @@ if (isset($aweber_webform_plugin)) {
     add_action('aweber/aweber.php',  array(&$aweber_webform_plugin, 'init'));
     add_action('admin_menu', 'AWeberFormsWidgetController_ap');
     add_action('admin_init', 'AWeberRegisterSettings');
-    add_action('plugins_loaded', 'AWeberFormsWidgetController_widget');
+    add_action('init', 'AWeberFormsWidgetController_widget');
     add_action('admin_print_scripts', array(&$aweber_webform_plugin, 'addHeaderCode'));
     add_action('wp_ajax_get_widget_control', array(&$aweber_webform_plugin, 'printWidgetControlAjax'));
     add_action('wp_dashboard_setup', array(&$aweber_webform_plugin, 'aweber_add_dashboard_widgets'));
@@ -385,8 +389,8 @@ if (isset($aweber_webform_plugin)) {
     if (isset($_GET['page']) && in_array($_GET['page'], array('aweber.php', 'aweber_web_form', 'aweber_landing_page'))) {
         add_action('in_admin_header', array(&$aweber_webform_plugin, 'attachAWeberheader'));
 
-        # if PHP Version is less than 5.6, the error message will be shown in AWeber Pages.
-        if (version_compare(phpversion(), '5.6', '<')) {
+        # if PHP Version is less than 7.2, the error message will be shown in AWeber Pages.
+        if (version_compare(phpversion(), AWEBER_PHP_MIN_VERSION, '<')) {
             add_action('admin_notices', 'AWeberMandatoryPHPVersionMessage');
         }
     }

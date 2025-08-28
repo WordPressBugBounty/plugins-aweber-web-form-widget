@@ -1,6 +1,7 @@
 <?php
 namespace AWeberWebFormPluginNamespace;
 
+#[\AllowDynamicProperties]
 class AWeberException extends \Exception { }
 
 /**

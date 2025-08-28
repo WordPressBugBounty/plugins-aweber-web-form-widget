@@ -49,7 +49,7 @@ class AWeberWebformPlugin {
             'access_key'      => isset($pluginAdminOptions['access_key']) ? $pluginAdminOptions['access_key'] : NULL,
             'access_secret'   => isset($pluginAdminOptions['access_secret']) ? $pluginAdminOptions['access_secret'] : NULL,
         ));
-        $options = get_option($this->widgetOptionsName);
+        $options = get_option($this->widgetOptionsName, array());
         $keys = array(
             'list',
             'webform',

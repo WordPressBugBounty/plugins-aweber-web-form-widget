@@ -76,6 +76,7 @@ class AWeberServiceProvider implements OAuthServiceProvider {
  * @package
  * @version $id$
  */
+#[\AllowDynamicProperties]
 class AWeberAPIBase {
 
     /**
