@@ -49,7 +49,7 @@ class AWeberElementorWidget extends Widget_Base {
 	 * @return string Need Help URL.
 	 */
    	public function get_help_url() {
-   		return 'https://help.aweber.com/hc/en-us/articles/360047079534-How-do-I-integrate-Elementor-with-AWeber-';
+   		return 'https://docs.aweber.com/integrations/integrations/how-do-i-integrate-elementor-free-and-elementor-pr';
    	}
 	
 	/**

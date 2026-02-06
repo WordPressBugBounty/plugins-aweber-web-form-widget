@@ -183,7 +183,7 @@ class AWeberWebformPlugin {
                         </a>
                     </li>
                     <li class="e-overview__help">
-                        <a href="https://help.aweber.com/hc/en-us" target="_blank">
+                        <a href="https://docs.aweber.com/" target="_blank">
                             Help <span aria-hidden="true" class="dashicons dashicons-external"></span>
                         </a>
                     </li>
@@ -1285,7 +1285,7 @@ class AWeberWebformPlugin {
         * @return void
         */
     function displayCustomErrorMessages($response_error_code = '', $response_error_message = '', $return_message = 0) {
-        $kb_link = "https://help.aweber.com/hc/en-us/articles/204027976-How-Do-I-Use-AWeber-s-Webform-Widget-For-Wordpress-";
+        $kb_link = "https://docs.aweber.com/integrations/integrations/how-do-i-install-the-aweber-for-wordpress-plugin";
         $message = '';
         switch ($response_error_code) {
             case '400':
@@ -1337,8 +1337,8 @@ class AWeberWebformPlugin {
             return $message;
         }
 
-        $message = $message . '<br><br> Please refer to the <a target="_blank" href="' . $kb_link . '">knowledge base
-                </a> for assistance or email us at <a href="mailto:help@aweber.com">help@aweber.com</a>';
+        $message = $message . '<br><br> Please refer to the <a target="_blank" href="' . $kb_link . '">knowledge base</a>
+                 for assistance or email us at <a href="mailto:help@aweber.com">help@aweber.com</a>';
         $this->add_alert_message_html('negative', $message, 'aweber-body-wrapper');
     }
 
@@ -1430,7 +1430,10 @@ class AWeberWebformPlugin {
             echo wp_kses_post($after_title);
         }
 
-        echo wp_kses_post('<!-- AWeber for WordPress ' . AWEBER_PLUGIN_VERSION . ' -->' . $this->getWebformSnippet());
+        echo wp_kses(
+            '<!-- AWeber for WordPress ' . AWEBER_PLUGIN_VERSION . ' -->' . $this->getWebformSnippet(),
+            $this->getAllowedTags()
+        );
 
         if (isset($after_widget) && !empty($after_widget)) {
             echo wp_kses_post($after_widget);
@@ -1605,16 +1608,7 @@ class AWeberWebformPlugin {
         * @return void
         */
     function printWidgetControl() {
-        if (isset($_POST[$this->widgetOptionsName])) {
-            $options = get_option($this->widgetOptionsName);
-            $widget_data = $_POST[$this->widgetOptionsName];
-            if (isset($widget_data['submit']) && $widget_data['submit']) {
-                $options['list'] = $widget_data['list'];
-                $options['webform'] = $widget_data[$widget_data['list']]['webform'];
-
-                $this->updateWebFormSnippet($options);
-            }
-        } elseif(class_exists('WP_Block_Editor_Context') &&
+        if(class_exists('WP_Block_Editor_Context') &&
                     (
                         stripos($_SERVER['REQUEST_URI'], strtolower($this->widgetOptionsName)) !== false
                         || (isset($_GET['rest_route']) && stripos($_GET['rest_route'], strtolower($this->widgetOptionsName)) !== false))
@@ -1622,29 +1616,11 @@ class AWeberWebformPlugin {
             echo "<p class='aweber-legacy-message' style='font-size: 12px;'>You are using our legacy WordPress widget. Please remove and re-add the widget.</p>";
         } else {
             ?>
-            <div 
+            <div
                 id="<?php echo esc_attr($this->widgetOptionsName . '-content'); ?>" 
-                class="<?php echo esc_attr($this->widgetOptionsName . '-content'); ?>">
-                <img src="images/loading.gif" height="16" width="16" id="aweber-webform-loading" style="float: left; padding-right: 5px" />
-                 Loading...
+                class="<?php echo esc_attr($this->widgetOptionsName . '-content'); ?>" style="padding: 10px 0px 10px 0px">
+                Please use <b>Block-based Widget Editor</b> or Copy/Paste the Shortcode from <a href="<?php echo admin_url('admin.php?page=aweber_web_form') ?>">Forms</a> page in <b>Block Widget</b> to display a Sign Up form.
             </div>
-            <script type="text/javascript">
-            jQuery(document).ready(function($) {
-                if (typeof(<?php echo esc_html($this->widgetOptionsName); ?>) != 'undefined') { return; }
-                <?php echo esc_html($this->widgetOptionsName); ?> = true;
-
-                var data = {
-                    action: 'get_widget_control'
-                    nonce: '<?php echo esc_html(wp_create_nonce('get_widget_control')); ?>'
-                };
-
-                // since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
-                jQuery.post(ajaxurl, data, function(response) {
-                    var primary_content = jQuery('.<?php echo esc_attr($this->widgetOptionsName . '-content'); ?>');
-                    primary_content.each(function() { jQuery(this).html(response); });
-                });
-            });
-            </script>
             <?php
         }
     }
@@ -2124,7 +2100,7 @@ This AWeber account does not currently have any completed Sign Up Forms.
             ),
             'script' => array(
               'type' => 'text/javascript',
-              'href' => true,
+              'src' => true,
             ),
         ));
     }

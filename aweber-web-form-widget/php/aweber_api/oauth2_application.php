@@ -171,14 +171,14 @@ class OAuth2Application {
         if ($response->headers['Status'] == 401
             && $responseBody['error'] == 'invalid_token'
         ) {
-            throw new AWeberOAuth2TokenExpired('invalid token', 401);
+            throw new AWeberOAuth2TokenExpired('invalid_token', 401);
         }
 
         // This happens, when the wrong or invalid authorization code is sent.
         if ($response->headers['Status'] == 400
             and $responseBody['error'] == 'invalid_request'
         ) {
-            throw new AWeberOAuth2Exception('invalid request', 400);
+            throw new AWeberOAuth2Exception('invalid_request', 400);
         }
 
         // This is used for all other AWeber API.

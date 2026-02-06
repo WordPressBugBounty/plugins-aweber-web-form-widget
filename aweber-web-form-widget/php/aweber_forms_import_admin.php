@@ -36,21 +36,15 @@
                 $oauth2TokensOptions = null;
                 $error = null;
             } else if ($oauth_id && !$this->doAWeberTokenExists($pluginAdminOptions, $oauth2TokensOptions)) {
-                // Then they just saved a key and didn't remove anything
-                // Check it's validity then save it for later use
-                $error_code  = "";
-                $exception_occured = False;
-                $description = "Authorization code entered was: $oauth_id <br /> Please make sure you entered the complete authorization code and try again.";
-
                 // Not connected to AWeber. Get the AWeber OAuth2 connection
                 $oauth2TokensOptions = $this->generateAccessToken($oauth_id);
                 if (isset($oauth2TokensOptions['error'])) {
                     // Check the error is because of the In-correct authorization code was entered.
-                    if ($oauth2TokensOptions['status'] == '400' and $oauth2TokensOptions['error'] == 'invalid_request') {
+                    if ($oauth2TokensOptions['status'] == '400') {
                         $incorrect_oauth_id = True;
                         update_option('aweber_webform_oauth_id', '');
                     } else {
-                        $this->displayCustomErrorMessages($error_code, $oauth2TokensOptions['error']);
+                        $this->displayCustomErrorMessages($oauth2TokensOptions['status'], $oauth2TokensOptions['error']);
                         $this->deauthorize();
                     }
                 }
@@ -335,7 +329,7 @@
 
                                 <ul class="aweber-web-push-help">
                                     <li>
-                                        <a href="https://help.aweber.com/hc/en-us/articles/360051632473-What-are-Web-Push-Notifications-and-what-value-do-they-have-">What is Web Push?</a>
+                                        <a href="https://docs.aweber.com/web-push-notifications/web-push-notifications/what-are-web-push-notifications-and-what-value-do-">What is Web Push?</a>
                                     </li>
                                 </ul>
 

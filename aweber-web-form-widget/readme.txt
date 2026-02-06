@@ -4,7 +4,7 @@ Donate link: http://www.aweber.com
 Tags: email, marketing, email marketing, webform, web, form, aweber, mailing list, API, newsletter, web push notification, landing page, landing page form, sign up form, email automation, grow email list, increase subscribers, popup, form, lead generation, email subscription, page builder
 Requires at least: 4.7
 Tested up to: 6.8
-Stable tag: 7.3.27
+Stable tag: 7.3.30
 Requires PHP: 7.2
 License: MIT
 License URI: https://opensource.org/licenses/MIT
@@ -77,7 +77,7 @@ Whether you’ve been in business for ten years or are just getting started, thi
 
 
 == QUESTIONS? ==
-Need help? Here’s our [step-by-step plugin install walkthrough](https://help.aweber.com/hc/en-us/articles/204027976-How-Do-I-Use-AWeber-s-Webform-Widget-For-Wordpress-).
+Need help? Here’s our [step-by-step plugin install walkthrough](https://docs.aweber.com/integrations/integrations/how-do-i-install-the-aweber-for-wordpress-plugin).
 
 Still need help? Call, chat, or email our [award-winning support team](https://www.aweber.com/contact-us.htm), 24/7!
 
@@ -86,7 +86,7 @@ For over 20 years, AWeber has been a market leader helping over one million entr
 
 == Installation ==
 
-Please [consult our knowledge base for a step-by-step walkthrough](https://help.aweber.com/hc/en-us/articles/204027976-How-Do-I-Use-AWeber-s-Webform-Widget-For-Wordpress- "consult our knowledge base for a step-by-step walkthrough") of how to install AWeber's WordPress plugin.
+Please [consult our knowledge base for a step-by-step walkthrough](https://docs.aweber.com/integrations/integrations/how-do-i-install-the-aweber-for-wordpress-plugin "consult our knowledge base for a step-by-step walkthrough") of how to install AWeber's WordPress plugin.
 
 Call, chat, or email our friendly experts! The [award-winning AWeber Customer Solutions team](https://www.aweber.com/contact-us.htm "award-winning AWeber Customer Solutions team") is available 24/7 from our Pennsylvania HQ to help you with any plugin problems or questions.
 
@@ -103,6 +103,15 @@ If you're manually installing the widget as a .zip, make sure you upload it to "
 7. Easily integrate with AWeber through Elementor Free and Elementor Pro.
 
 == Changelog =
+= 7.3.30 =
+* Removed support for Classic Widget plugin for Widgets
+
+= 7.3.29 =
+* Show proper message for Invalid Authorization
+
+= 7.3.28 =
+* Minor tweaks
+
 = 7.3.27 =
 * Fix deprecation warnings for php 8.2 and later
 * Minimum PHP version of 7.2
