@@ -5,7 +5,7 @@ use AWeberWebFormPluginNamespace as AWeberWebformPluginAlias;
 Plugin Name: AWeber for WordPress
 Plugin URI: http://www.aweber.com/faq/questions/588/How+Do+I+Use+AWeber%27s+Webform+Widget+for+Wordpress%3F
 Description: Add AWeber Landing Pages and Sign Up Forms to your WordPress site
-Version: 7.3.30
+Version: 7.3.31
 Author: AWeber
 Author URI: http://www.aweber.com
 License: MIT
@@ -13,7 +13,7 @@ License: MIT
 
 
 // Defined the AWeber Wordpress plugin version that can be used accross the plugin.
-define ('AWEBER_PLUGIN_VERSION', 'v7.3.30');
+define ('AWEBER_PLUGIN_VERSION', 'v7.3.31');
 define ('AWEBER_PHP_MIN_VERSION', '7.2');
 
 function AWeberMandatoryPHPVersionMessage() {
@@ -227,6 +227,10 @@ if (!function_exists('registerAWeberFormAction')) {
 function load_admin_page_styles() {
     global $aweber_webform_plugin;
 
+    if (!is_admin() || !isset($aweber_webform_plugin)) {
+        return;
+    }
+
     $nonces = [
         'reload_aweber_cache' => wp_create_nonce('reload_aweber_cache'),
         'get_signup_webforms' => wp_create_nonce('get_signup_webforms'),
@@ -252,6 +256,10 @@ function load_admin_page_styles() {
 if (!function_exists('AWeberAdminFooterSettings')) {
     function AWeberAdminFooterSettings() {
         global $aweber_webform_plugin;
+
+        if (!is_admin() || !isset($aweber_webform_plugin)) {
+            return;
+        }
 
         $pluginAdminOptions = get_option($aweber_webform_plugin->adminOptionsName);
         $oauth2TokensOptions = get_option($aweber_webform_plugin->oauth2TokensOptions);
@@ -287,6 +295,10 @@ if (!function_exists('add_settings_link')) {
     function add_settings_link($links) {
         global $aweber_webform_plugin;
 
+        if (!is_admin() || !isset($aweber_webform_plugin)) {
+            return $links;
+        }
+
         $pluginAdminOptions = get_option($aweber_webform_plugin->adminOptionsName);
         $oauth2TokensOptions = get_option($aweber_webform_plugin->oauth2TokensOptions);
         if ( $aweber_webform_plugin->doAWeberTokenExists($pluginAdminOptions, $oauth2TokensOptions)) {
@@ -317,6 +329,10 @@ if (!function_exists('add_plugin_description_link')) {
 if (!function_exists('hideWebformLegacyWidget')) {
     function hideWebformLegacyWidget($widget_types) {
         global $aweber_webform_plugin;
+
+        if (!is_admin() || !isset($aweber_webform_plugin)) {
+            return $widget_types;
+        }
 
         $widget_types[] = strtolower($aweber_webform_plugin->widgetOptionsName);
         return $widget_types;

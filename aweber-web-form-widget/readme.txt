@@ -4,7 +4,7 @@ Donate link: http://www.aweber.com
 Tags: email, marketing, email marketing, webform, web, form, aweber, mailing list, API, newsletter, web push notification, landing page, landing page form, sign up form, email automation, grow email list, increase subscribers, popup, form, lead generation, email subscription, page builder
 Requires at least: 4.7
 Tested up to: 6.8
-Stable tag: 7.3.30
+Stable tag: 7.3.31
 Requires PHP: 7.2
 License: MIT
 License URI: https://opensource.org/licenses/MIT
@@ -103,6 +103,9 @@ If you're manually installing the widget as a .zip, make sure you upload it to "
 7. Easily integrate with AWeber through Elementor Free and Elementor Pro.
 
 == Changelog =
+= 7.3.31 =
+* Verify the object exists before calling it
+
 = 7.3.30 =
 * Removed support for Classic Widget plugin for Widgets
 
