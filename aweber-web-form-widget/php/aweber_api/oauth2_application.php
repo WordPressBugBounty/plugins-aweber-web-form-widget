@@ -259,7 +259,10 @@ class OAuth2Application {
         $tokens['client_id'] = $this->getClientId();
 
         // Stored the refreshed tokens in the Database.
-        update_option($this->oauth2TokensOptions, $tokens);
+        // Use autoload=false to prevent tokens from being affected by
+        // database optimization plugins or other plugins that may clear
+        // autoloaded options (fixes OAuth connection persistence issues).
+        update_option($this->oauth2TokensOptions, $tokens, false);
     }
 
     public function revokeAccessToken() {

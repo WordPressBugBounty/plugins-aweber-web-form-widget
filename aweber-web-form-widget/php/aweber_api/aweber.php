@@ -345,7 +345,10 @@ class AWeberOAuth2API extends AWeberAPIBase {
         );
         // Store the state and code verifier.
         // These are required while getting the accees token
-        update_option($this->oauth2AuthorizedOptions, $authorizeOptions);
+        // Use autoload=false to prevent options from being affected by
+        // database optimization plugins or other plugins that may clear
+        // autoloaded options (fixes OAuth connection persistence issues).
+        update_option($this->oauth2AuthorizedOptions, $authorizeOptions, false);
         // Get the Authorize URL.
         return $this->adapter->getAuthorizeUrl($authorizeOptions['code_verifier']);
     }

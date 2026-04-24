@@ -1450,9 +1450,18 @@ class AWeberWebformPlugin {
         return new AWeberAPI($consumer_key, $consumer_secret);
     }
 
+    /**
+     * Gets the AWeber OAuth2 API instance.
+     *
+     * Retrieves stored OAuth2 tokens and validates their integrity before
+     * constructing the API object. Returns an uninitialized API object if
+     * tokens are missing or invalid.
+     *
+     * @return AWeberOAuth2API The OAuth2 API instance.
+     */
     public function getAWeberOAuth2API() {
         $oauth2TokensOptions = get_option($this->oauth2TokensOptions);
-        if (isset($oauth2TokensOptions['access_token'])) {
+        if ($this->validateOAuth2TokenIntegrity($oauth2TokensOptions)) {
             return new AWeberOAuth2API(
                 $oauth2TokensOptions['access_token'],
                 $oauth2TokensOptions['refresh_token'],
@@ -1462,26 +1471,100 @@ class AWeberWebformPlugin {
         return new AWeberOAuth2API();
     }
 
+    /**
+     * Checks whether an AWeber token exists for the plugin.
+     *
+     * Determines if either OAuth1 or OAuth2 credentials are present and valid.
+     * Checks OAuth1 credentials first, then falls back to OAuth2 validation.
+     *
+     * @param array $pluginAdminOptions The plugin admin options containing OAuth1 credentials.
+     * @param array $oauth2TokensOptions The OAuth2 tokens options.
+     * @return boolean True if valid tokens exist, false otherwise.
+     */
     public function doAWeberTokenExists($pluginAdminOptions, $oauth2TokensOptions) {
-        if (
-            isset($pluginAdminOptions['access_key'])
-            || isset($oauth2TokensOptions['access_token'])
-        ) {
+        if (!empty($pluginAdminOptions['access_key'])) {
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log('[AWeber Plugin] Uses OAuth1 connection.');
+            }
             return True;
         }
-        return False;
+        // Validate for the OAuth2 tokens.
+        return $this->validateOAuth2TokenIntegrity($oauth2TokensOptions);
     }
 
+    /**
+     * Validates OAuth2 token integrity and logs diagnostic information
+     * when tokens are missing or potentially corrupted.
+     *
+     * This helps diagnose OAuth connection persistence issues that may
+     * be caused by database optimization plugins, plugin conflicts,
+     * or other environmental factors.
+     * @param array $oauth2TokensOptions OAuth2 tokens.
+     * @return boolean Whether OAuth2 tokens are 'valid' or not.
+     */
+    public function validateOAuth2TokenIntegrity($oauth2TokensOptions = null) {
+        $issues = array();
+
+        // Check if tokens exist
+        if (empty($oauth2TokensOptions)) {
+            $issues[] = 'OAuth2 tokens option is empty or missing from database';
+        } elseif (!is_array($oauth2TokensOptions)) {
+            $issues[] = 'OAuth2 tokens option is not an array (may be corrupted)';
+        } else {
+            // Check for required token fields
+            if (empty($oauth2TokensOptions['access_token'])) {
+                $issues[] = 'access_token is missing or empty';
+            }
+            if (empty($oauth2TokensOptions['refresh_token'])) {
+                $issues[] = 'refresh_token is missing or empty';
+            }
+            if (!isset($oauth2TokensOptions['expires_on'])) {
+                $issues[] = 'expires_on timestamp is missing';
+            } elseif (!is_numeric($oauth2TokensOptions['expires_on']) || intval($oauth2TokensOptions['expires_on']) <= 0) {
+                $issues[] = 'expires_on timestamp is invalid';
+            }
+        }
+
+        if (!empty($issues)) {
+            if (defined('WP_DEBUG') && WP_DEBUG) {
+                error_log('[AWeber Plugin] OAuth2 token integrity check failed: ' . implode('; ', $issues));
+            }
+            return False;
+        }
+        return True;
+    }
+
+    /**
+     * Generates an OAuth2 access token from an authorization code.
+     *
+     * Exchanges the authorization code for access and refresh tokens,
+     * then stores them in the database with autoload disabled to prevent
+     * interference from database optimization plugins.
+     *
+     * @param string $authorizeCode The authorization code from the OAuth2 flow.
+     * @return array The token response containing access_token, refresh_token, and expires_on.
+     */
     public function generateAccessToken($authorizeCode) {
         $aweberOAuth2 = $this->getAWeberOAuth2API();
         $response = $aweberOAuth2->generateAccessToken($authorizeCode);
         if (isset($response['access_token'])) {
             // Retrieved the access token successfully. Store in the DB.
-            update_option($this->oauth2TokensOptions, $response);
+            // Use autoload=false to prevent tokens from being affected by
+            // database optimization plugins or other plugins that may clear
+            // autoloaded options (fixes OAuth connection persistence issues).
+            update_option($this->oauth2TokensOptions, $response, false);
         }
         return $response;
     }
 
+    /**
+     * Revokes the OAuth2 access token and removes stored credentials.
+     *
+     * Calls AWeber's API to revoke the token, then removes the tokens
+     * and authorization state from the WordPress database.
+     *
+     * @return void
+     */
     public function revokeAccessToken() {
         $aweber = $this->getAWeberOAuth2API();
         // Revoke the access token from AWeber
