@@ -418,6 +418,52 @@
                             $this->add_alert_message_html('negative', '', 'aweber-hide');
                         ?>
                         <h1>System Info</h1>
+                        <?php
+                            /**
+                             * Host Mismatch Detection
+                             *
+                             * Detects and warns about domain mismatch between the current HTTP request
+                             * host and WordPress URL configuration. This is a common issue with staging
+                             * sites where the database was copied from production but the URLs weren't
+                             * updated, causing landing page URLs to display incorrectly.
+                             *
+                             * The comparison normalizes hosts by:
+                             * - Stripping port numbers from HTTP_HOST (e.g., "example.com:8080" -> "example.com")
+                             * - Converting to lowercase for case-insensitive comparison
+                             *
+                             * @var string $raw_http_host    Raw HTTP_HOST from server, sanitized
+                             * @var string $current_host     Normalized current request hostname
+                             * @var string $configured_home_host Normalized WordPress Home URL hostname
+                             * @var string $configured_site_host Normalized WordPress Site URL hostname
+                             * @var bool   $home_mismatch    True if current host differs from Home URL host
+                             * @var bool   $site_mismatch    True if current host differs from Site URL host
+                             */
+                            $raw_http_host = isset($_SERVER['HTTP_HOST']) ? sanitize_text_field(wp_unslash($_SERVER['HTTP_HOST'])) : '';
+                            $current_host = $raw_http_host ? wp_parse_url('http://' . $raw_http_host, PHP_URL_HOST) : '';
+                            $configured_home_host = function_exists('get_home_url') ? wp_parse_url(get_home_url(), PHP_URL_HOST) : '';
+                            $configured_site_host = function_exists('get_site_url') ? wp_parse_url(get_site_url(), PHP_URL_HOST) : '';
+
+                            // Lowercase all hosts for case-insensitive comparison
+                            $current_host = $current_host ? strtolower($current_host) : '';
+                            $configured_home_host = $configured_home_host ? strtolower($configured_home_host) : '';
+                            $configured_site_host = $configured_site_host ? strtolower($configured_site_host) : '';
+
+                            // Check if current host differs from either the home URL or site URL host
+                            $home_mismatch = $current_host && $configured_home_host && $current_host !== $configured_home_host;
+                            $site_mismatch = $current_host && $configured_site_host && $current_host !== $configured_site_host;
+
+                            if ($home_mismatch || $site_mismatch):
+                        ?>
+                            <div class="aweber-alert-msg negative" role="alert" aria-live="polite">
+                                <strong>URL Mismatch Detected:</strong> You are accessing this site from
+                                <strong><?php echo esc_html($current_host); ?></strong>, but WordPress is configured to use
+                                <strong><?php echo esc_html($configured_home_host); ?></strong> (Home URL)<?php if ($configured_site_host !== $configured_home_host): ?> and <strong><?php echo esc_html($configured_site_host); ?></strong> (Site URL)<?php endif; ?>.
+                                This may cause landing page URLs to display incorrectly.
+                                To fix this, update your WordPress Address and Site Address in
+                                <a href="<?php echo esc_url(admin_url('options-general.php')); ?>">Settings &gt; General</a>
+                                or in your wp-config.php file.
+                            </div>
+                        <?php endif; ?>
                         <table>
                             <tr>
                                 <td><b>Home URL:</b></td>
@@ -435,7 +481,7 @@
                                 <td><b>Site URL:</b></td>
                                 <td><?php
                                     if (function_exists('get_site_url')):
-                                        echo esc_html(get_home_url());
+                                        echo esc_html(get_site_url());
                                     else:
                                         echo '-';
                                     endif;
